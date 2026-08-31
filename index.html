@@ -1,0 +1,4377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#020617">
+
+  <meta
+    name="description"
+    content="Radar Bluetooth Scanner Pro 4.0 - Scanner BLE Web Bluetooth para Android"
+  >
+
+  <title>Radar Bluetooth Scanner Pro 4.0</title>
+
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: #0f172a;
+      --panel-2: #111827;
+      --border: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --cyan: #06b6d4;
+      --cyan-light: #22d3ee;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --purple: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      background: var(--bg);
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(6, 182, 212, 0.08),
+          transparent 35%
+        ),
+        var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+
+      padding:
+        calc(12px + env(safe-area-inset-top))
+        16px
+        12px;
+
+      background: rgba(2, 6, 23, 0.94);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 13px;
+
+      color: var(--cyan-light);
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(34, 211, 238, 0.2),
+          rgba(6, 182, 212, 0.04)
+        );
+
+      border: 1px solid rgba(34, 211, 238, 0.35);
+
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: white;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-subtitle {
+      margin-top: 2px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      min-height: 40px;
+
+      padding: 9px 13px;
+
+      border-radius: 11px;
+
+      color: var(--text);
+      background: #172033;
+      border: 1px solid #263449;
+
+      font-size: 12px;
+      font-weight: 700;
+
+      transition: 0.15s;
+    }
+
+    .btn:hover {
+      background: #1e293b;
+    }
+
+    .btn-primary {
+      color: #001018;
+      background: var(--cyan);
+      border-color: var(--cyan);
+    }
+
+    .btn-primary:hover {
+      background: var(--cyan-light);
+    }
+
+    .btn-danger {
+      color: white;
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-small {
+      min-height: 34px;
+      padding: 7px 10px;
+      font-size: 11px;
+    }
+
+    /* STATUS */
+
+    .status-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+
+      padding: 10px 16px;
+
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.65);
+    }
+
+    .status {
+      min-width: 0;
+
+      padding: 8px 10px;
+
+      border-radius: 10px;
+
+      background: #0b1220;
+      border: 1px solid var(--border);
+    }
+
+    .status-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--muted);
+    }
+
+    .status-value {
+      margin-top: 3px;
+
+      font-size: 11px;
+      font-weight: 800;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .online {
+      color: var(--green);
+    }
+
+    .offline {
+      color: var(--red);
+    }
+
+    .warning {
+      color: var(--yellow);
+    }
+
+    /* ALERT */
+
+    .alert {
+      margin: 12px 16px 0;
+
+      padding: 12px;
+
+      border-radius: 12px;
+
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .alert-warning {
+      color: #fde68a;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .alert-success {
+      color: #bbf7d0;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+    }
+
+    .alert-danger {
+      color: #fecaca;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    /* MAIN */
+
+    main {
+      width: 100%;
+      max-width: 1500px;
+      margin: auto;
+
+      padding: 16px;
+
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 16px;
+    }
+
+    .panel {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(15, 23, 42, 0.88),
+          rgba(8, 15, 29, 0.88)
+        );
+
+      border: 1px solid var(--border);
+      border-radius: 18px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.22);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+
+      padding: 15px 16px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .panel-description {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .badge {
+      padding: 5px 8px;
+
+      border-radius: 8px;
+
+      color: var(--cyan-light);
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+
+      font-size: 10px;
+      font-family: monospace;
+      white-space: nowrap;
+    }
+
+    /* RADAR */
+
+    .radar-container {
+      position: relative;
+
+      width: min(90vw, 430px);
+      aspect-ratio: 1;
+
+      margin: 20px auto;
+
+      display: grid;
+      place-items: center;
+    }
+
+    .radar {
+      position: absolute;
+      inset: 0;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(6, 182, 212, 0.08) 0 3%,
+          transparent 3.5% 24%,
+          rgba(6, 182, 212, 0.025) 24.5% 25%,
+          transparent 25.5% 49%,
+          rgba(6, 182, 212, 0.025) 49.5% 50%,
+          transparent 50.5% 74%,
+          rgba(6, 182, 212, 0.025) 74.5% 75%,
+          transparent 75.5%
+        );
+
+      border: 1px solid rgba(34, 211, 238, 0.25);
+
+      overflow: hidden;
+    }
+
+    .radar::before,
+    .radar::after {
+      content: "";
+      position: absolute;
+      background: rgba(34, 211, 238, 0.15);
+    }
+
+    .radar::before {
+      width: 100%;
+      height: 1px;
+      top: 50%;
+      left: 0;
+    }
+
+    .radar::after {
+      width: 1px;
+      height: 100%;
+      left: 50%;
+      top: 0;
+    }
+
+    .sweep {
+      position: absolute;
+
+      width: 50%;
+      height: 50%;
+
+      left: 50%;
+      top: 50%;
+
+      transform-origin: 0 0;
+
+      background:
+        conic-gradient(
+          from 0deg,
+          rgba(34, 211, 238, 0.45),
+          rgba(34, 211, 238, 0.04),
+          transparent 25deg
+        );
+
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+
+      animation: sweep 3s linear infinite;
+    }
+
+    @keyframes sweep {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .radar-center {
+      position: absolute;
+
+      width: 10px;
+      height: 10px;
+
+      border-radius: 50%;
+
+      background: var(--cyan-light);
+
+      box-shadow:
+        0 0 10px var(--cyan),
+        0 0 25px rgba(6, 182, 212, 0.5);
+    }
+
+    .radar-ring {
+      position: absolute;
+      border: 1px dashed rgba(34, 211, 238, 0.16);
+      border-radius: 50%;
+    }
+
+    .ring-1 {
+      width: 25%;
+      height: 25%;
+    }
+
+    .ring-2 {
+      width: 50%;
+      height: 50%;
+    }
+
+    .ring-3 {
+      width: 75%;
+      height: 75%;
+    }
+
+    .ring-4 {
+      width: 100%;
+      height: 100%;
+    }
+
+    .device-dot {
+      position: absolute;
+
+      width: 32px;
+      height: 32px;
+
+      display: grid;
+      place-items: center;
+
+      transform: translate(-50%, -50%);
+
+      border-radius: 50%;
+
+      background: #0f172a;
+      border: 1px solid rgba(34, 211, 238, 0.45);
+
+      box-shadow:
+        0 0 12px rgba(6, 182, 212, 0.2);
+
+      font-size: 15px;
+
+      z-index: 10;
+    }
+
+    .device-dot.selected {
+      background: var(--cyan);
+      color: #001018;
+
+      border-color: var(--cyan-light);
+
+      box-shadow:
+        0 0 0 5px rgba(34, 211, 238, 0.15),
+        0 0 20px rgba(6, 182, 212, 0.5);
+    }
+
+    .radar-legend {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+
+      padding: 0 16px 18px;
+
+      color: var(--muted);
+
+      font-size: 10px;
+    }
+
+    /* CONTROLS */
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      padding: 0 16px 16px;
+    }
+
+    .search {
+      width: 100%;
+
+      padding: 11px 12px;
+
+      border-radius: 10px;
+
+      color: white;
+      background: #080f1d;
+      border: 1px solid var(--border);
+
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: rgba(6, 182, 212, 0.6);
+    }
+
+    /* DEVICE LIST */
+
+    .device-list {
+      max-height: 420px;
+      overflow-y: auto;
+    }
+
+    .device {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 12px 16px;
+
+      border-bottom: 1px solid rgba(30, 41, 59, 0.7);
+
+      transition: 0.15s;
+    }
+
+    .device:hover {
+      background: rgba(30, 41, 59, 0.25);
+    }
+
+    .device-icon {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 11px;
+
+      background: #111c2f;
+      border: 1px solid var(--border);
+
+      font-size: 17px;
+    }
+
+    .device-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .device-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: white;
+
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .device-meta {
+      margin-top: 3px;
+
+      color: var(--muted);
+
+      font-size: 9px;
+
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .device-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .icon-button {
+      width: 34px;
+      height: 34px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 9px;
+
+      color: var(--muted);
+      background: #111827;
+      border: 1px solid var(--border);
+
+      font-size: 13px;
+    }
+
+    .icon-button:hover {
+      color: white;
+      border-color: #334155;
+    }
+
+    /* DETAILS */
+
+    .details {
+      padding: 16px;
+    }
+
+    .empty {
+      min-height: 180px;
+
+      display: grid;
+      place-items: center;
+
+      padding: 30px;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 12px;
+    }
+
+    .device-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      margin-bottom: 16px;
+    }
+
+    .big-icon {
+      width: 50px;
+      height: 50px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 14px;
+
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+
+      font-size: 23px;
+    }
+
+    .device-header h3 {
+      margin: 0;
+
+      color: white;
+
+      font-size: 15px;
+    }
+
+    .device-header p {
+      margin: 4px 0 0;
+
+      color: var(--muted);
+
+      font-size: 10px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+
+      margin-bottom: 16px;
+    }
+
+    .detail-card {
+      padding: 10px;
+
+      border-radius: 10px;
+
+      background: #091120;
+      border: 1px solid var(--border);
+    }
+
+    .detail-label {
+      color: var(--muted);
+
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-value {
+      margin-top: 4px;
+
+      color: white;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      word-break: break-word;
+    }
+
+    /* SERVICES */
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin: 18px 0 8px;
+
+      color: white;
+
+      font-size: 11px;
+      font-weight: 800;
+
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .service {
+      margin-bottom: 8px;
+
+      border-radius: 10px;
+
+      background: #080f1d;
+      border: 1px solid var(--border);
+
+      overflow: hidden;
+    }
+
+    .service-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+
+      padding: 10px;
+    }
+
+    .service-name {
+      color: white;
+
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .service-uuid {
+      margin-top: 3px;
+
+      color: var(--muted);
+
+      font-size: 8px;
+      font-family: monospace;
+      word-break: break-all;
+    }
+
+    .characteristics {
+      border-top: 1px solid var(--border);
+    }
+
+    .characteristic {
+      padding: 10px;
+
+      border-bottom: 1px solid rgba(30, 41, 59, 0.7);
+    }
+
+    .characteristic:last-child {
+      border-bottom: 0;
+    }
+
+    .characteristic-title {
+      color: white;
+
+      font-size: 10px;
+      font-weight: 800;
+
+      word-break: break-all;
+    }
+
+    .characteristic-uuid {
+      margin-top: 3px;
+
+      color: #64748b;
+
+      font-size: 8px;
+      font-family: monospace;
+
+      word-break: break-all;
+    }
+
+    .properties {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+
+      margin-top: 6px;
+    }
+
+    .property {
+      padding: 3px 5px;
+
+      border-radius: 5px;
+
+      color: var(--cyan-light);
+
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.18);
+
+      font-size: 8px;
+      font-family: monospace;
+    }
+
+    .char-actions {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+
+      margin-top: 8px;
+    }
+
+    .char-value {
+      margin-top: 7px;
+
+      padding: 7px;
+
+      border-radius: 7px;
+
+      color: #cbd5e1;
+
+      background: #020617;
+
+      font-size: 9px;
+      font-family: monospace;
+
+      word-break: break-all;
+    }
+
+    /* LOG */
+
+    .logs {
+      max-height: 240px;
+
+      overflow-y: auto;
+
+      padding: 8px 16px 16px;
+    }
+
+    .log {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 8px;
+
+      padding: 5px 0;
+
+      border-bottom: 1px solid rgba(30, 41, 59, 0.45);
+
+      font-size: 9px;
+    }
+
+    .log-time {
+      color: #64748b;
+      font-family: monospace;
+    }
+
+    .log-text {
+      color: #cbd5e1;
+    }
+
+    .log-success {
+      color: #86efac;
+    }
+
+    .log-error {
+      color: #fca5a5;
+    }
+
+    .log-warning {
+      color: #fde68a;
+    }
+
+    /* FOOTER */
+
+    footer {
+      margin-top: auto;
+
+      padding:
+        18px
+        16px
+        calc(18px + env(safe-area-inset-bottom));
+
+      color: #64748b;
+
+      text-align: center;
+
+      font-size: 9px;
+
+      border-top: 1px solid var(--border);
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        align-items: flex-start;
+      }
+
+      .brand-title {
+        max-width: 170px;
+      }
+
+      .header-actions {
+        flex-direction: column;
+      }
+
+      .header-actions .btn {
+        min-height: 34px;
+        padding: 7px 9px;
+        font-size: 10px;
+      }
+
+      .status-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      main {
+        padding: 10px;
+        gap: 10px;
+      }
+
+      .panel {
+        border-radius: 14px;
+      }
+
+      .radar-container {
+        width: min(88vw, 380px);
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .device {
+        padding: 10px;
+      }
+
+      .device-actions {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .brand-subtitle {
+        display: none;
+      }
+
+      .brand-logo {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+      }
+
+      .brand-title {
+        font-size: 12px;
+        max-width: 145px;
+      }
+
+      .radar-container {
+        width: 84vw;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* TOAST */
+
+    #toastContainer {
+      position: fixed;
+
+      left: 12px;
+      right: 12px;
+
+      bottom:
+        calc(12px + env(safe-area-inset-bottom));
+
+      z-index: 100;
+
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      pointer-events: none;
+    }
+
+    .toast {
+      max-width: 600px;
+      margin: auto;
+      width: 100%;
+
+      padding: 12px;
+
+      border-radius: 11px;
+
+      color: white;
+
+      background: rgba(15, 23, 42, 0.96);
+
+      border: 1px solid #334155;
+
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+      font-size: 11px;
+
+      animation: toastIn 0.2s ease-out;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* MODAL */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+
+      z-index: 90;
+
+      display: none;
+      align-items: center;
+      justify-content: center;
+
+      padding: 16px;
+
+      background: rgba(0, 0, 0, 0.7);
+
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(100%, 560px);
+      max-height: 90vh;
+
+      overflow-y: auto;
+
+      padding: 18px;
+
+      border-radius: 16px;
+
+      background: #0f172a;
+      border: 1px solid #263449;
+
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal h2 {
+      margin: 0 0 12px;
+
+      color: white;
+
+      font-size: 15px;
+    }
+
+    .modal p,
+    .modal li {
+      color: #94a3b8;
+
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .modal-close {
+      float: right;
+    }
+
+    /* SPINNER */
+
+    .spinner {
+      display: inline-block;
+
+      width: 13px;
+      height: 13px;
+
+      border: 2px solid rgba(0, 0, 0, 0.25);
+      border-top-color: currentColor;
+
+      border-radius: 50%;
+
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header>
+
+    <div class="brand">
+
+      <div class="brand-logo">
+        BLE
+      </div>
+
+      <div>
+        <div class="brand-title">
+          Radar Bluetooth Scanner Pro
+        </div>
+
+        <div class="brand-subtitle">
+          BLE • GATT • Android • Web Bluetooth
+        </div>
+      </div>
+
+    </div>
+
+    <div class="header-actions">
+
+      <button
+        id="knownDevicesBtn"
+        class="btn"
+      >
+        📱 Autorizados
+      </button>
+
+      <button
+        id="scanBtn"
+        class="btn btn-primary"
+      >
+        ⚡ Escanear BLE
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- STATUS -->
+
+  <div class="status-bar">
+
+    <div class="status">
+
+      <div class="status-label">
+        API
+      </div>
+
+      <div
+        id="apiStatus"
+        class="status-value warning"
+      >
+        Verificando...
+      </div>
+
+    </div>
+
+    <div class="status">
+
+      <div class="status-label">
+        HTTPS
+      </div>
+
+      <div
+        id="httpsStatus"
+        class="status-value"
+      >
+        -
+      </div>
+
+    </div>
+
+    <div class="status">
+
+      <div class="status-label">
+        Bluetooth
+      </div>
+
+      <div
+        id="bluetoothStatus"
+        class="status-value"
+      >
+        -
+      </div>
+
+    </div>
+
+    <div class="status">
+
+      <div class="status-label">
+        Dispositivos
+      </div>
+
+      <div
+        id="deviceCount"
+        class="status-value online"
+      >
+        0
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ALERT -->
+
+  <div
+    id="compatibilityAlert"
+    class="alert alert-warning"
+  >
+    Verificando compatibilidade...
+  </div>
+
+
+  <!-- MAIN -->
+
+  <main>
+
+    <!-- RADAR -->
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div>
+          <div class="panel-title">
+            Radar BLE
+          </div>
+
+          <div class="panel-description">
+            Visualização dos dispositivos autorizados
+          </div>
+        </div>
+
+        <div
+          id="targetBadge"
+          class="badge"
+        >
+          0 ALVOS
+        </div>
+
+      </div>
+
+
+      <div
+        id="radarContainer"
+        class="radar-container"
+      >
+
+        <div class="radar">
+
+          <div class="radar-ring ring-1"></div>
+          <div class="radar-ring ring-2"></div>
+          <div class="radar-ring ring-3"></div>
+          <div class="radar-ring ring-4"></div>
+
+          <div class="sweep"></div>
+
+        </div>
+
+        <div class="radar-center"></div>
+
+      </div>
+
+
+      <div class="radar-legend">
+
+        <span>
+          ● Dispositivo
+        </span>
+
+        <span>
+          ◎ Centro
+        </span>
+
+        <span>
+          BLE
+        </span>
+
+      </div>
+
+
+      <div class="controls">
+
+        <input
+          id="searchInput"
+          class="search"
+          type="search"
+          placeholder="Pesquisar dispositivo ou ID..."
+          autocomplete="off"
+        >
+
+        <button
+          id="clearBtn"
+          class="btn btn-small"
+        >
+          🗑 Limpar
+        </button>
+
+        <button
+          id="exportBtn"
+          class="btn btn-small"
+        >
+          ⬇ Exportar JSON
+        </button>
+
+        <button
+          id="diagnosticBtn"
+          class="btn btn-small"
+        >
+          🔎 Diagnóstico
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- DEVICES / DETAILS -->
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div>
+
+          <div class="panel-title">
+            Dispositivos
+          </div>
+
+          <div class="panel-description">
+            BLE encontrados e autorizados
+          </div>
+
+        </div>
+
+        <div
+          id="selectedBadge"
+          class="badge"
+        >
+          NENHUM
+        </div>
+
+      </div>
+
+
+      <div
+        id="deviceList"
+        class="device-list"
+      ></div>
+
+
+      <div
+        id="details"
+        class="details"
+      >
+
+        <div class="empty">
+          Selecione um dispositivo para visualizar informações, conectar ao GATT e descobrir serviços.
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- LOG -->
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div>
+
+          <div class="panel-title">
+            Log do Scanner
+          </div>
+
+          <div class="panel-description">
+            Eventos e diagnóstico em tempo real
+          </div>
+
+        </div>
+
+        <button
+          id="clearLogsBtn"
+          class="btn btn-small"
+        >
+          Limpar
+        </button>
+
+      </div>
+
+      <div
+        id="logs"
+        class="logs"
+      ></div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    Radar Bluetooth Scanner Pro 4.0 • Web Bluetooth BLE • Android
+  </footer>
+
+</div>
+
+
+<div id="toastContainer"></div>
+
+
+<!-- MODAL DIAGNÓSTICO -->
+
+<div
+  id="modalBackdrop"
+  class="modal-backdrop"
+>
+
+  <div class="modal">
+
+    <button
+      id="modalClose"
+      class="btn btn-small modal-close"
+    >
+      Fechar
+    </button>
+
+    <h2>
+      Diagnóstico do aparelho
+    </h2>
+
+    <div id="diagnosticContent"></div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+/*
+===========================================================
+ RADAR BLUETOOTH SCANNER PRO 4.0
+ Web Bluetooth / BLE / Android
+===========================================================
+
+ IMPORTANTE:
+
+ Este aplicativo NÃO finge ser um scanner BLE nativo.
+
+ A Web Bluetooth API possui limitações.
+
+ requestDevice():
+ - abre o seletor Bluetooth;
+ - exige ação do usuário;
+ - entrega o dispositivo selecionado;
+ - permite acessar GATT se autorizado.
+
+ O navegador não entrega uma lista contínua universal
+ de todos os BLE próximos.
+
+ RSSI também não é garantido pela Web Bluetooth.
+ Portanto este projeto NÃO inventa RSSI.
+
+===========================================================
+*/
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+const state = {
+
+  devices: [],
+
+  selectedId: null,
+
+  connectedId: null,
+
+  scanning: false,
+
+  muted: false,
+
+  logs: [],
+
+  characteristics: new Map(),
+
+  services: new Map(),
+
+  notifications: new Map()
+
+};
+
+
+/* =========================================================
+   SERVIÇOS BLE IMPORTANTES
+========================================================= */
+
+const STANDARD_SERVICES = [
+
+  "generic_access",
+
+  "generic_attribute",
+
+  "battery_service",
+
+  "device_information",
+
+  "heart_rate",
+
+  "heart_rate_measurement",
+
+  "health_thermometer",
+
+  "blood_pressure",
+
+  "cycling_power",
+
+  "cycling_speed_and_cadence",
+
+  "current_time",
+
+  "current_time_service",
+
+  "human_interface_device",
+
+  "tx_power",
+
+  "immediate_alert",
+
+  "link_loss",
+
+  "scan_parameters",
+
+  "running_speed_and_cadence",
+
+  "glucose",
+
+  "pulse_oximeter",
+
+  "weight_scale",
+
+  "environmental_sensing",
+
+  "automation_io",
+
+  "current_time",
+
+  "reference_time_information",
+
+  "phone_alert_status",
+
+  "alert_notification",
+
+  "location_and_navigation",
+
+  "object_transfer_service"
+
+];
+
+
+/* =========================================================
+   UUIDS CONHECIDOS
+========================================================= */
+
+const UUID_NAMES = {
+
+  "00001800-0000-1000-8000-00805f9b34fb":
+    "Generic Access",
+
+  "00001801-0000-1000-8000-00805f9b34fb":
+    "Generic Attribute",
+
+  "0000180f-0000-1000-8000-00805f9b34fb":
+    "Battery Service",
+
+  "0000180a-0000-1000-8000-00805f9b34fb":
+    "Device Information",
+
+  "0000180d-0000-1000-8000-00805f9b34fb":
+    "Heart Rate",
+
+  "00001812-0000-1000-8000-00805f9b34fb":
+    "Human Interface Device",
+
+  "00001809-0000-1000-8000-00805f9b34fb":
+    "Health Thermometer",
+
+  "00001810-0000-1000-8000-00805f9b34fb":
+    "Blood Pressure",
+
+  "0000181a-0000-1000-8000-00805f9b34fb":
+    "Environmental Sensing"
+
+};
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const $ = id => document.getElementById(id);
+
+const scanBtn = $("scanBtn");
+
+const knownDevicesBtn = $("knownDevicesBtn");
+
+const deviceList = $("deviceList");
+
+const details = $("details");
+
+const logsElement = $("logs");
+
+const searchInput = $("searchInput");
+
+const deviceCount = $("deviceCount");
+
+const targetBadge = $("targetBadge");
+
+const selectedBadge = $("selectedBadge");
+
+const apiStatus = $("apiStatus");
+
+const httpsStatus = $("httpsStatus");
+
+const bluetoothStatus = $("bluetoothStatus");
+
+const compatibilityAlert = $("compatibilityAlert");
+
+const modalBackdrop = $("modalBackdrop");
+
+const diagnosticContent = $("diagnosticContent");
+
+const toastContainer = $("toastContainer");
+
+
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
+
+function now() {
+
+  return new Date().toLocaleTimeString("pt-BR");
+
+}
+
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+function uuidName(uuid) {
+
+  const key = String(uuid).toLowerCase();
+
+  return UUID_NAMES[key] || "Serviço BLE";
+
+
+}
+
+
+function showToast(message) {
+
+  const toast = document.createElement("div");
+
+  toast.className = "toast";
+
+  toast.textContent = message;
+
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+
+    toast.remove();
+
+  }, 3500);
+
+}
+
+
+function log(message, type = "info") {
+
+  const entry = {
+
+    time: now(),
+
+    message,
+
+    type
+
+  };
+
+  state.logs.unshift(entry);
+
+  state.logs = state.logs.slice(0, 200);
+
+  renderLogs();
+
+}
+
+
+function renderLogs() {
+
+  logsElement.innerHTML = state.logs.map(item => {
+
+    const cls =
+      item.type === "error"
+        ? "log-error"
+        : item.type === "success"
+        ? "log-success"
+        : item.type === "warning"
+        ? "log-warning"
+        : "";
+
+    return `
+      <div class="log">
+
+        <div class="log-time">
+          ${escapeHTML(item.time)}
+        </div>
+
+        <div class="log-text ${cls}">
+          ${escapeHTML(item.message)}
+        </div>
+
+      </div>
+    `;
+
+  }).join("");
+
+}
+
+
+function setStatus(element, text, className) {
+
+  element.textContent = text;
+
+  element.className =
+    "status-value " + className;
+
+}
+
+
+/* =========================================================
+   DETECÇÃO DO NAVEGADOR
+========================================================= */
+
+function isAndroid() {
+
+  return /Android/i.test(navigator.userAgent);
+
+}
+
+
+function browserName() {
+
+  const ua = navigator.userAgent;
+
+  if (/EdgA/i.test(ua)) return "Microsoft Edge Android";
+
+  if (/OPR/i.test(ua)) return "Opera Android";
+
+  if (/Chrome/i.test(ua)) return "Google Chrome";
+
+  return "Navegador não identificado";
+
+}
+
+
+/* =========================================================
+   COMPATIBILIDADE
+========================================================= */
+
+async function checkCompatibility() {
+
+  const secure =
+    window.isSecureContext === true;
+
+  const supported =
+    "bluetooth" in navigator;
+
+  setStatus(
+    httpsStatus,
+    secure ? "Seguro" : "Não seguro",
+    secure ? "online" : "offline"
+  );
+
+  setStatus(
+    apiStatus,
+    supported ? "Disponível" : "Indisponível",
+    supported ? "online" : "offline"
+  );
+
+  if (!secure) {
+
+    compatibilityAlert.className =
+      "alert alert-danger";
+
+    compatibilityAlert.innerHTML = `
+      <strong>HTTPS necessário.</strong><br>
+      O Web Bluetooth funciona somente em contexto seguro.
+      Abra este projeto através de um endereço HTTPS.
+    `;
+
+    setStatus(
+      bluetoothStatus,
+      "Bloqueado",
+      "offline"
+    );
+
+    return;
+
+  }
+
+
+  if (!supported) {
+
+    compatibilityAlert.className =
+      "alert alert-danger";
+
+    compatibilityAlert.innerHTML = `
+      <strong>Web Bluetooth não disponível.</strong><br>
+      Use Google Chrome no Android e certifique-se de que
+      o aparelho possui Bluetooth.
+    `;
+
+    setStatus(
+      bluetoothStatus,
+      "Indisponível",
+      "offline"
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    if (
+      typeof navigator.bluetooth.getAvailability ===
+      "function"
+    ) {
+
+      const available =
+        await navigator.bluetooth.getAvailability();
+
+      setStatus(
+        bluetoothStatus,
+        available ? "Disponível" : "Indisponível",
+        available ? "online" : "warning"
+      );
+
+      if (!available) {
+
+        compatibilityAlert.className =
+          "alert alert-warning";
+
+        compatibilityAlert.innerHTML = `
+          Bluetooth não está disponível para o navegador.
+          Verifique se o Bluetooth do Android está ligado.
+        `;
+
+        return;
+
+      }
+
+    } else {
+
+      setStatus(
+        bluetoothStatus,
+        "API disponível",
+        "online"
+      );
+
+    }
+
+  } catch (error) {
+
+    setStatus(
+      bluetoothStatus,
+      "Verificação limitada",
+      "warning"
+    );
+
+  }
+
+
+  compatibilityAlert.className =
+    "alert alert-success";
+
+  compatibilityAlert.innerHTML = `
+    <strong>Web Bluetooth pronto.</strong><br>
+    ${escapeHTML(browserName())}
+    ${isAndroid() ? " • Android detectado" : ""}
+    • Use "Escanear BLE" para abrir o seletor de dispositivos.
+  `;
+
+}
+
+
+/* =========================================================
+   ÍCONE
+========================================================= */
+
+function deviceIcon(device) {
+
+  const name =
+    (device.name || "").toLowerCase();
+
+  if (
+    name.includes("headphone") ||
+    name.includes("headset") ||
+    name.includes("buds") ||
+    name.includes("airpods") ||
+    name.includes("sony") ||
+    name.includes("jbl")
+  ) {
+    return "🎧";
+  }
+
+  if (
+    name.includes("keyboard") ||
+    name.includes("teclado")
+  ) {
+    return "⌨️";
+  }
+
+  if (
+    name.includes("mouse")
+  ) {
+    return "🖱️";
+  }
+
+  if (
+    name.includes("watch") ||
+    name.includes("band")
+  ) {
+    return "⌚";
+  }
+
+  if (
+    name.includes("phone") ||
+    name.includes("android") ||
+    name.includes("iphone")
+  ) {
+    return "📱";
+  }
+
+  if (
+    name.includes("sensor") ||
+    name.includes("temperature") ||
+    name.includes("thermo")
+  ) {
+    return "🌡️";
+  }
+
+  return "📡";
+
+}
+
+
+/* =========================================================
+   ADICIONAR DISPOSITIVO
+========================================================= */
+
+function normalizeDevice(device) {
+
+  return {
+
+    id: device.id,
+
+    name:
+      device.name &&
+      device.name.trim()
+        ? device.name.trim()
+        : "Nome não anunciado",
+
+    rawDevice: device,
+
+    connected:
+      !!device.gatt?.connected,
+
+    discovered: false,
+
+    battery: null,
+
+    services: [],
+
+    lastSeen: now(),
+
+    simulated: false
+
+  };
+
+}
+
+
+function addDevice(rawDevice) {
+
+  const normalized =
+    normalizeDevice(rawDevice);
+
+  const existing =
+    state.devices.find(
+      d => d.id === normalized.id
+    );
+
+  if (existing) {
+
+    existing.rawDevice = rawDevice;
+
+    if (
+      rawDevice.name &&
+      rawDevice.name.trim()
+    ) {
+
+      existing.name =
+        rawDevice.name.trim();
+
+    }
+
+    existing.connected =
+      !!rawDevice.gatt?.connected;
+
+    existing.lastSeen = now();
+
+    renderAll();
+
+    return existing;
+
+  }
+
+
+  state.devices.unshift(normalized);
+
+  state.selectedId =
+    normalized.id;
+
+  attachDeviceEvents(normalized);
+
+  renderAll();
+
+  return normalized;
+
+}
+
+
+/* =========================================================
+   EVENTOS DO DISPOSITIVO
+========================================================= */
+
+function attachDeviceEvents(device) {
+
+  const raw = device.rawDevice;
+
+  if (!raw) return;
+
+  raw.addEventListener(
+    "gattserverdisconnected",
+    () => {
+
+      device.connected = false;
+
+      if (
+        state.connectedId === device.id
+      ) {
+
+        state.connectedId = null;
+
+      }
+
+      log(
+        `GATT desconectado: ${device.name}`,
+        "warning"
+      );
+
+      renderAll();
+
+    }
+  );
+
+
+  /*
+    advertisementreceived pode existir em alguns
+    navegadores/dispositivos.
+
+    Não dependemos dele para o funcionamento.
+  */
+
+  raw.addEventListener?.(
+    "advertisementreceived",
+    event => {
+
+      device.lastSeen = now();
+
+      if (
+        typeof event.rssi === "number"
+      ) {
+
+        device.rssi = event.rssi;
+
+      }
+
+      renderAll();
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SCAN
+========================================================= */
+
+async function scanBLE() {
+
+  if (state.scanning) return;
+
+  if (
+    !window.isSecureContext ||
+    !("bluetooth" in navigator)
+  ) {
+
+    showToast(
+      "Web Bluetooth não está disponível neste contexto."
+    );
+
+    return;
+
+  }
+
+
+  state.scanning = true;
+
+  scanBtn.disabled = true;
+
+  scanBtn.innerHTML = `
+    <span class="spinner"></span>
+    Procurando...
+  `;
+
+  log(
+    "Abrindo seletor BLE do Chrome...",
+    "info"
+  );
+
+
+  try {
+
+    const device =
+      await navigator.bluetooth.requestDevice({
+
+        acceptAllDevices: true,
+
+        optionalServices:
+          STANDARD_SERVICES
+
+      });
+
+
+    if (!device) {
+
+      throw new Error(
+        "Nenhum dispositivo retornado."
+      );
+
+    }
+
+
+    const normalized =
+      addDevice(device);
+
+
+    log(
+      `Dispositivo autorizado: ${normalized.name}`,
+      "success"
+    );
+
+    showToast(
+      `${normalized.name} adicionado ao scanner.`
+    );
+
+
+    await selectDevice(normalized.id);
+
+
+  } catch (error) {
+
+    if (
+      error.name === "NotFoundError"
+    ) {
+
+      log(
+        "Seleção cancelada ou nenhum dispositivo escolhido.",
+        "info"
+      );
+
+    } else if (
+      error.name === "SecurityError"
+    ) {
+
+      log(
+        "Acesso Bluetooth bloqueado pelo navegador.",
+        "error"
+      );
+
+      showToast(
+        "Permissão Bluetooth bloqueada."
+      );
+
+    } else {
+
+      log(
+        `Erro no BLE: ${error.message || error}`,
+        "error"
+      );
+
+      showToast(
+        error.message || "Erro ao acessar Bluetooth."
+      );
+
+    }
+
+  } finally {
+
+    state.scanning = false;
+
+    scanBtn.disabled = false;
+
+    scanBtn.innerHTML =
+      "⚡ Escanear BLE";
+
+  }
+
+}
+
+
+/* =========================================================
+   DISPOSITIVOS JÁ AUTORIZADOS
+========================================================= */
+
+async function loadKnownDevices() {
+
+  if (
+    !navigator.bluetooth ||
+    typeof navigator.bluetooth.getDevices !==
+      "function"
+  ) {
+
+    showToast(
+      "Este navegador não disponibiliza getDevices()."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const devices =
+      await navigator.bluetooth.getDevices();
+
+
+    if (!devices.length) {
+
+      showToast(
+        "Nenhum dispositivo previamente autorizado."
+      );
+
+      log(
+        "Nenhum dispositivo BLE previamente autorizado.",
+        "info"
+      );
+
+      return;
+
+    }
+
+
+    for (const raw of devices) {
+
+      addDevice(raw);
+
+    }
+
+
+    log(
+      `${devices.length} dispositivo(s) autorizado(s) carregado(s).`,
+      "success"
+    );
+
+
+    showToast(
+      `${devices.length} dispositivo(s) carregado(s).`
+    );
+
+
+  } catch (error) {
+
+    log(
+      `Não foi possível carregar dispositivos autorizados: ${error.message}`,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CONECTAR
+========================================================= */
+
+async function connectDevice(id) {
+
+  const device =
+    state.devices.find(
+      d => d.id === id
+    );
+
+  if (!device) return;
+
+  const raw =
+    device.rawDevice;
+
+
+  if (!raw) {
+
+    showToast(
+      "Objeto Bluetooth não disponível."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    if (
+      raw.gatt &&
+      raw.gatt.connected
+    ) {
+
+      device.connected = true;
+
+      state.connectedId =
+        device.id;
+
+      renderAll();
+
+      await discoverServices(device);
+
+      return;
+
+    }
+
+
+    log(
+      `Conectando ao GATT: ${device.name}`,
+      "info"
+    );
+
+
+    const server =
+      await raw.gatt.connect();
+
+
+    if (!server.connected) {
+
+      throw new Error(
+        "O GATT não confirmou a conexão."
+      );
+
+    }
+
+
+    device.connected = true;
+
+    state.connectedId =
+      device.id;
+
+
+    log(
+      `GATT conectado: ${device.name}`,
+      "success"
+    );
+
+
+    showToast(
+      `Conectado a ${device.name}`
+    );
+
+
+    renderAll();
+
+
+    await discoverServices(device);
+
+
+  } catch (error) {
+
+    device.connected = false;
+
+    state.connectedId = null;
+
+    renderAll();
+
+
+    log(
+      `Falha GATT: ${error.message || error}`,
+      "error"
+    );
+
+    showToast(
+      `Falha: ${error.message || "conexão recusada"}`
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DESCONECTAR
+========================================================= */
+
+function disconnectDevice(id) {
+
+  const device =
+    state.devices.find(
+      d => d.id === id
+    );
+
+  if (!device) return;
+
+
+  try {
+
+    if (
+      device.rawDevice?.gatt?.connected
+    ) {
+
+      device.rawDevice.gatt.disconnect();
+
+    }
+
+  } catch (error) {
+
+    console.warn(error);
+
+  }
+
+
+  device.connected = false;
+
+  if (state.connectedId === id) {
+
+    state.connectedId = null;
+
+  }
+
+
+  log(
+    `Desconectado: ${device.name}`,
+    "info"
+  );
+
+
+  renderAll();
+
+}
+
+
+/* =========================================================
+   DESCOBRIR SERVIÇOS
+========================================================= */
+
+async function discoverServices(device) {
+
+  const raw =
+    device.rawDevice;
+
+  if (
+    !raw?.gatt?.connected
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    log(
+      `Descobrindo serviços GATT de ${device.name}...`,
+      "info"
+    );
+
+
+    const services =
+      await raw.gatt.getPrimaryServices();
+
+
+    device.services = [];
+
+
+    for (const service of services) {
+
+      const serviceData = {
+
+        uuid: service.uuid,
+
+        name: uuidName(service.uuid),
+
+        characteristics: []
+
+      };
+
+
+      let characteristics = [];
+
+
+      try {
+
+        characteristics =
+          await service.getCharacteristics();
+
+      } catch (error) {
+
+        log(
+          `Não foi possível listar características de ${service.uuid}`,
+          "warning"
+        );
+
+      }
+
+
+      for (
+        const characteristic
+        of characteristics
+      ) {
+
+        const properties =
+          characteristic.properties || {};
+
+
+        const characteristicData = {
+
+          uuid: characteristic.uuid,
+
+          properties,
+
+          serviceUuid: service.uuid,
+
+          value: null
+
+        };
+
+
+        state.characteristics.set(
+          characteristic.uuid,
+          characteristic
+        );
+
+
+        serviceData.characteristics.push(
+          characteristicData
+        );
+
+      }
+
+
+      device.services.push(
+        serviceData
+      );
+
+    }
+
+
+    device.discovered = true;
+
+
+    log(
+      `${services.length} serviço(s) encontrado(s).`,
+      "success"
+    );
+
+
+    renderDetails(device);
+
+
+    await readBattery(device);
+
+
+  } catch (error) {
+
+    log(
+      `Erro na descoberta GATT: ${error.message}`,
+      "error"
+    );
+
+    renderDetails(device);
+
+  }
+
+}
+
+
+/* =========================================================
+   BATERIA
+========================================================= */
+
+async function readBattery(device) {
+
+  const serviceData =
+    device.services.find(
+      s =>
+        s.uuid.toLowerCase() ===
+        "0000180f-0000-1000-8000-00805f9b34fb"
+    );
+
+
+  if (!serviceData) return;
+
+
+  try {
+
+    const service =
+      await device.rawDevice.gatt.getPrimaryService(
+        "battery_service"
+      );
+
+
+    const characteristic =
+      await service.getCharacteristic(
+        "battery_level"
+      );
+
+
+    if (
+      !characteristic.properties.read
+    ) {
+
+      return;
+
+    }
+
+
+    const value =
+      await characteristic.readValue();
+
+
+    if (value.byteLength > 0) {
+
+      device.battery =
+        value.getUint8(0);
+
+      log(
+        `Bateria: ${device.battery}%`,
+        "success"
+      );
+
+      renderDetails(device);
+
+    }
+
+  } catch (error) {
+
+    log(
+      `Bateria não pôde ser lida: ${error.message}`,
+      "warning"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LEITURA DE CHARACTERISTIC
+========================================================= */
+
+async function readCharacteristic(
+  deviceId,
+  uuid
+) {
+
+  const device =
+    state.devices.find(
+      d => d.id === deviceId
+    );
+
+  if (!device) return;
+
+
+  const characteristic =
+    state.characteristics.get(uuid);
+
+
+  if (!characteristic) {
+
+    showToast(
+      "Característica não encontrada."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    if (
+      !characteristic.properties.read
+    ) {
+
+      showToast(
+        "Esta característica não possui leitura."
+      );
+
+      return;
+
+    }
+
+
+    const value =
+      await characteristic.readValue();
+
+
+    const text =
+      formatDataView(value);
+
+
+    const service =
+      device.services.find(
+        s =>
+          s.uuid.toLowerCase() ===
+          characteristic.serviceUuid.toLowerCase()
+      );
+
+
+    const charData =
+      service?.characteristics.find(
+        c =>
+          c.uuid === characteristic.uuid
+      );
+
+
+    if (charData) {
+
+      charData.value = text;
+
+    }
+
+
+    log(
+      `Leitura ${characteristic.uuid}: ${text}`,
+      "success"
+    );
+
+
+    renderDetails(device);
+
+  } catch (error) {
+
+    log(
+      `Erro ao ler característica: ${error.message}`,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   NOTIFICAÇÕES
+========================================================= */
+
+async function toggleNotification(
+  deviceId,
+  uuid
+) {
+
+  const device =
+    state.devices.find(
+      d => d.id === deviceId
+    );
+
+  if (!device) return;
+
+
+  const characteristic =
+    state.characteristics.get(uuid);
+
+  if (!characteristic) return;
+
+
+  const active =
+    state.notifications.has(uuid);
+
+
+  try {
+
+    if (active) {
+
+      await characteristic.stopNotifications();
+
+      characteristic.removeEventListener(
+        "characteristicvaluechanged",
+        handleCharacteristicNotification
+      );
+
+      state.notifications.delete(uuid);
+
+      log(
+        `Notificação desativada: ${uuid}`,
+        "info"
+      );
+
+    } else {
+
+      await characteristic.startNotifications();
+
+      characteristic.addEventListener(
+        "characteristicvaluechanged",
+        handleCharacteristicNotification
+      );
+
+      state.notifications.set(
+        uuid,
+        true
+      );
+
+      log(
+        `Notificação ativada: ${uuid}`,
+        "success"
+      );
+
+    }
+
+
+    renderDetails(device);
+
+  } catch (error) {
+
+    log(
+      `Erro em notificação: ${error.message}`,
+      "error"
+    );
+
+  }
+
+}
+
+
+function handleCharacteristicNotification(event) {
+
+  const characteristic =
+    event.target;
+
+
+  const value =
+    event.target.value;
+
+
+  const text =
+    formatDataView(value);
+
+
+  const device =
+    state.devices.find(
+      d =>
+        d.services.some(
+          s =>
+            s.characteristics.some(
+              c =>
+                c.uuid ===
+                characteristic.uuid
+            )
+        )
+    );
+
+
+  if (!device) return;
+
+
+  const service =
+    device.services.find(
+      s =>
+        s.characteristics.some(
+          c =>
+            c.uuid ===
+            characteristic.uuid
+        )
+    );
+
+
+  const charData =
+    service?.characteristics.find(
+      c =>
+        c.uuid ===
+        characteristic.uuid
+    );
+
+
+  if (charData) {
+
+    charData.value = text;
+
+  }
+
+
+  log(
+    `Notify ${characteristic.uuid}: ${text}`,
+    "success"
+  );
+
+
+  renderDetails(device);
+
+}
+
+
+/* =========================================================
+   FORMATAÇÃO DOS DADOS
+========================================================= */
+
+function formatDataView(view) {
+
+  if (!view) return "";
+
+  const bytes = [];
+
+  for (
+    let i = 0;
+    i < view.byteLength;
+    i++
+  ) {
+
+    bytes.push(
+      view.getUint8(i)
+        .toString(16)
+        .padStart(2, "0")
+    );
+
+  }
+
+
+  const hex =
+    bytes.join(" ");
+
+
+  let text = "";
+
+  try {
+
+    text =
+      new TextDecoder("utf-8", {
+        fatal: false
+      }).decode(view);
+
+  } catch {
+
+    text = "";
+
+  }
+
+
+  const cleanText =
+    text
+      .replace(/[^\x20-\x7EÀ-ÿ]/g, "")
+      .trim();
+
+
+  if (cleanText) {
+
+    return `${hex} | "${cleanText}"`;
+
+  }
+
+
+  return hex;
+
+}
+
+
+/* =========================================================
+   RENDER DEVICE LIST
+========================================================= */
+
+function getFilteredDevices() {
+
+  const query =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+
+  return state.devices.filter(
+    device => {
+
+      if (!query) return true;
+
+      return (
+
+        device.name
+          .toLowerCase()
+          .includes(query)
+
+        ||
+
+        device.id
+          .toLowerCase()
+          .includes(query)
+
+      );
+
+    }
+  );
+
+}
+
+
+function renderDeviceList() {
+
+  const devices =
+    getFilteredDevices();
+
+
+  if (!devices.length) {
+
+    deviceList.innerHTML = `
+      <div class="empty">
+        Nenhum dispositivo BLE autorizado.<br><br>
+        Toque em <strong>Escanear BLE</strong>.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  deviceList.innerHTML =
+    devices.map(device => {
+
+      const selected =
+        device.id ===
+        state.selectedId;
+
+      const rssi =
+        typeof device.rssi === "number"
+          ? `${device.rssi} dBm`
+          : "RSSI indisponível";
+
+
+      const connection =
+        device.connected
+          ? "● Conectado"
+          : "○ Desconectado";
+
+
+      return `
+
+        <div
+          class="device"
+          data-device-id="${escapeHTML(device.id)}"
+        >
+
+          <div class="device-icon">
+            ${deviceIcon(device)}
+          </div>
+
+          <div
+            class="device-info"
+            onclick="window.selectDevice('${escapeHTML(device.id)}')"
+          >
+
+            <div class="device-name">
+              ${escapeHTML(device.name)}
+            </div>
+
+            <div class="device-meta">
+              ${escapeHTML(connection)}
+              • ${escapeHTML(rssi)}
+              • ID ${escapeHTML(device.id)}
+            </div>
+
+          </div>
+
+          <div class="device-actions">
+
+            <button
+              class="icon-button"
+              title="Selecionar"
+              onclick="window.selectDevice('${escapeHTML(device.id)}')"
+            >
+              ${selected ? "✓" : "›"}
+            </button>
+
+            <button
+              class="icon-button"
+              title="Conectar"
+              onclick="window.connectDevice('${escapeHTML(device.id)}')"
+            >
+              🔗
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   RENDER RADAR
+========================================================= */
+
+function renderRadar() {
+
+  const container =
+    $("radarContainer");
+
+
+  container
+    .querySelectorAll(".device-dot")
+    .forEach(el => el.remove());
+
+
+  const devices =
+    getFilteredDevices();
+
+
+  devices.forEach(
+    (device, index) => {
+
+      const angle =
+        (
+          (index * 137.5)
+          +
+          (
+            Number(
+              String(device.id)
+                .split("")
+                .reduce(
+                  (a, c) =>
+                    a + c.charCodeAt(0),
+                  0
+                )
+            )
+          )
+        ) % 360;
+
+
+      const radius =
+        24 +
+        (
+          (index * 31)
+          %
+          55
+        );
+
+
+      const x =
+        50 +
+        radius *
+        Math.cos(
+          angle *
+          Math.PI /
+          180
+        );
+
+
+      const y =
+        50 +
+        radius *
+        Math.sin(
+          angle *
+          Math.PI /
+          180
+        );
+
+
+      const button =
+        document.createElement("button");
+
+
+      button.className =
+        "device-dot" +
+        (
+          device.id === state.selectedId
+            ? " selected"
+            : ""
+        );
+
+
+      button.style.left =
+        `${x}%`;
+
+      button.style.top =
+        `${y}%`;
+
+
+      button.title =
+        device.name;
+
+
+      button.textContent =
+        deviceIcon(device);
+
+
+      button.onclick =
+        () =>
+          selectDevice(device.id);
+
+
+      container.appendChild(button);
+
+    });
+
+
+  targetBadge.textContent =
+    `${devices.length} ALVOS`;
+
+}
+
+
+/* =========================================================
+   RENDER DETAILS
+========================================================= */
+
+function renderDetails(device) {
+
+  if (!device) {
+
+    details.innerHTML = `
+      <div class="empty">
+        Selecione um dispositivo para visualizar informações.
+      </div>
+    `;
+
+    selectedBadge.textContent =
+      "NENHUM";
+
+    return;
+
+  }
+
+
+  selectedBadge.textContent =
+    device.name
+      .slice(0, 18)
+      .toUpperCase();
+
+
+  const servicesHTML =
+    device.services.length
+
+      ?
+
+      device.services.map(
+        service => `
+
+          <div class="service">
+
+            <div class="service-header">
+
+              <div>
+
+                <div class="service-name">
+                  ${escapeHTML(service.name)}
+                </div>
+
+                <div class="service-uuid">
+                  ${escapeHTML(service.uuid)}
+                </div>
+
+              </div>
+
+              <div class="badge">
+                ${service.characteristics.length}
+              </div>
+
+            </div>
+
+            <div class="characteristics">
+
+              ${
+                service.characteristics.length
+
+                ?
+
+                service.characteristics.map(
+                  characteristic => {
+
+                    const props =
+                      characteristic.properties ||
+                      {};
+
+                    const propertyNames = [];
+
+                    if (props.read)
+                      propertyNames.push("READ");
+
+                    if (props.write)
+                      propertyNames.push("WRITE");
+
+                    if (props.writeWithoutResponse)
+                      propertyNames.push("WRITE_NR");
+
+                    if (props.notify)
+                      propertyNames.push("NOTIFY");
+
+                    if (props.indicate)
+                      propertyNames.push("INDICATE");
+
+
+                    const notificationActive =
+                      state.notifications.has(
+                        characteristic.uuid
+                      );
+
+
+                    return `
+
+                      <div class="characteristic">
+
+                        <div class="characteristic-title">
+                          Característica
+                        </div>
+
+                        <div class="characteristic-uuid">
+                          ${escapeHTML(
+                            characteristic.uuid
+                          )}
+                        </div>
+
+
+                        <div class="properties">
+
+                          ${
+                            propertyNames.length
+
+                              ?
+
+                              propertyNames.map(
+                                p =>
+                                  `<span class="property">
+                                    ${p}
+                                  </span>`
+                              ).join("")
+
+                              :
+
+                              `<span class="property">
+                                SEM PROPRIEDADES
+                              </span>`
+                          }
+
+                        </div>
+
+
+                        <div class="char-actions">
+
+                          ${
+                            props.read
+
+                            ?
+
+                            `
+                              <button
+                                class="btn btn-small"
+                                onclick="window.readCharacteristic(
+                                  '${escapeHTML(device.id)}',
+                                  '${escapeHTML(characteristic.uuid)}'
+                                )"
+                              >
+                                📖 Ler
+                              </button>
+                            `
+
+                            : ""
+                          }
+
+
+                          ${
+                            props.notify
+
+                            ?
+
+                            `
+                              <button
+                                class="btn btn-small"
+                                onclick="window.toggleNotification(
+                                  '${escapeHTML(device.id)}',
+                                  '${escapeHTML(characteristic.uuid)}'
+                                )"
+                              >
+                                ${
+                                  notificationActive
+                                    ? "🔴 Parar"
+                                    : "🔔 Notificar"
+                                }
+                              </button>
+                            `
+
+                            : ""
+                          }
+
+                        </div>
+
+
+                        ${
+                          characteristic.value
+
+                            ?
+
+                            `
+                              <div class="char-value">
+                                ${escapeHTML(
+                                  characteristic.value
+                                )}
+                              </div>
+                            `
+
+                            : ""
+                        }
+
+                      </div>
+
+                    `;
+
+                  }
+                ).join("")
+
+                :
+
+                `
+                  <div class="empty">
+                    Nenhuma característica disponível.
+                  </div>
+                `
+              }
+
+            </div>
+
+          </div>
+
+        `
+      ).join("")
+
+      :
+
+      `
+        <div class="empty">
+          Conecte-se ao dispositivo para descobrir
+          os serviços GATT.
+        </div>
+      `;
+
+
+  details.innerHTML = `
+
+    <div class="device-header">
+
+      <div class="big-icon">
+        ${deviceIcon(device)}
+      </div>
+
+      <div>
+
+        <h3>
+          ${escapeHTML(device.name)}
+        </h3>
+
+        <p>
+          ${
+            device.connected
+              ? "● GATT conectado"
+              : "○ Não conectado"
+          }
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="detail-grid">
+
+      <div class="detail-card">
+
+        <div class="detail-label">
+          Nome
+        </div>
+
+        <div class="detail-value">
+          ${escapeHTML(device.name)}
+        </div>
+
+      </div>
+
+
+      <div class="detail-card">
+
+        <div class="detail-label">
+          ID
+        </div>
+
+        <div class="detail-value">
+          ${escapeHTML(device.id)}
+        </div>
+
+      </div>
+
+
+      <div class="detail-card">
+
+        <div class="detail-label">
+          RSSI
+        </div>
+
+        <div class="detail-value">
+
+          ${
+            typeof device.rssi === "number"
+              ? `${device.rssi} dBm`
+              : "Não fornecido pelo navegador"
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-card">
+
+        <div class="detail-label">
+          Bateria
+        </div>
+
+        <div class="detail-value">
+
+          ${
+            device.battery !== null
+              ? `${device.battery}%`
+              : "Não disponível"
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-card">
+
+        <div class="detail-label">
+          GATT
+        </div>
+
+        <div class="detail-value">
+
+          ${
+            device.connected
+              ? "Conectado"
+              : "Desconectado"
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-card">
+
+        <div class="detail-label">
+          Serviços
+        </div>
+
+        <div class="detail-value">
+          ${device.services.length}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div style="
+      display:flex;
+      gap:7px;
+      flex-wrap:wrap;
+    ">
+
+      ${
+        device.connected
+
+        ?
+
+        `
+          <button
+            class="btn btn-danger btn-small"
+            onclick="window.disconnectDevice(
+              '${escapeHTML(device.id)}'
+            )"
+          >
+            ⛔ Desconectar
+          </button>
+        `
+
+        :
+
+        `
+          <button
+            class="btn btn-primary btn-small"
+            onclick="window.connectDevice(
+              '${escapeHTML(device.id)}'
+            )"
+          >
+            🔗 Conectar GATT
+          </button>
+        `
+      }
+
+
+      <button
+        class="btn btn-small"
+        onclick="window.forgetDevice(
+          '${escapeHTML(device.id)}'
+        )"
+      >
+        🗑 Remover
+      </button>
+
+    </div>
+
+
+    <div class="section-title">
+
+      <span>
+        Serviços GATT
+      </span>
+
+      <span class="badge">
+        ${device.services.length}
+      </span>
+
+    </div>
+
+
+    ${servicesHTML}
+
+  `;
+
+}
+
+
+/* =========================================================
+   SELECIONAR
+========================================================= */
+
+async function selectDevice(id) {
+
+  const device =
+    state.devices.find(
+      d => d.id === id
+    );
+
+  if (!device) return;
+
+
+  state.selectedId =
+    id;
+
+
+  renderAll();
+
+
+  if (
+    device.connected &&
+    !device.discovered
+  ) {
+
+    await discoverServices(device);
+
+  }
+
+}
+
+
+/* =========================================================
+   REMOVER
+========================================================= */
+
+async function forgetDevice(id) {
+
+  const index =
+    state.devices.findIndex(
+      d => d.id === id
+    );
+
+  if (index < 0) return;
+
+
+  const device =
+    state.devices[index];
+
+
+  try {
+
+    if (
+      device.rawDevice &&
+      typeof device.rawDevice.forget ===
+        "function"
+    ) {
+
+      await device.rawDevice.forget();
+
+      log(
+        `Permissão removida: ${device.name}`,
+        "success"
+      );
+
+    }
+
+  } catch (error) {
+
+    log(
+      `Não foi possível revogar a permissão: ${error.message}`,
+      "warning"
+    );
+
+  }
+
+
+  state.devices.splice(index, 1);
+
+
+  if (
+    state.selectedId === id
+  ) {
+
+    state.selectedId = null;
+
+  }
+
+
+  renderAll();
+
+}
+
+
+/* =========================================================
+   EXPORTAR
+========================================================= */
+
+function exportJSON() {
+
+  const exportData =
+    state.devices.map(
+      device => ({
+
+        id: device.id,
+
+        name: device.name,
+
+        connected: device.connected,
+
+        battery: device.battery,
+
+        rssi:
+          typeof device.rssi === "number"
+            ? device.rssi
+            : null,
+
+        services:
+          device.services,
+
+        lastSeen:
+          device.lastSeen,
+
+        exportedAt:
+          new Date().toISOString()
+
+      })
+    );
+
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          exportData,
+          null,
+          2
+        )
+      ],
+      {
+        type: "application/json"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement("a");
+
+
+  a.href = url;
+
+  a.download =
+    `ble-scan-${Date.now()}.json`;
+
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+
+  URL.revokeObjectURL(url);
+
+
+  log(
+    "Dados exportados para JSON.",
+    "success"
+  );
+
+}
+
+
+/* =========================================================
+   DIAGNÓSTICO
+========================================================= */
+
+async function showDiagnostics() {
+
+  const checks = [];
+
+
+  checks.push({
+    label: "Android",
+    value:
+      isAndroid()
+        ? "Detectado"
+        : "Não detectado"
+  });
+
+
+  checks.push({
+    label: "Navegador",
+    value: browserName()
+  });
+
+
+  checks.push({
+    label: "HTTPS",
+    value:
+      window.isSecureContext
+        ? "OK"
+        : "ERRO"
+  });
+
+
+  checks.push({
+    label: "Web Bluetooth",
+    value:
+      "bluetooth" in navigator
+        ? "Disponível"
+        : "Indisponível"
+  });
+
+
+  checks.push({
+    label: "GATT",
+    value:
+      "bluetooth" in navigator
+        ? "Suportado pela API"
+        : "Indisponível"
+  });
+
+
+  checks.push({
+    label: "getDevices",
+    value:
+      typeof navigator.bluetooth?.getDevices ===
+      "function"
+        ? "Disponível"
+        : "Não disponível"
+  });
+
+
+  checks.push({
+    label: "requestDevice",
+    value:
+      typeof navigator.bluetooth?.requestDevice ===
+      "function"
+        ? "Disponível"
+        : "Não disponível"
+  });
+
+
+  checks.push({
+    label: "getAvailability",
+    value:
+      typeof navigator.bluetooth?.getAvailability ===
+      "function"
+        ? "Disponível"
+        : "Não disponível"
+  });
+
+
+  checks.push({
+    label: "Dispositivos no scanner",
+    value:
+      String(state.devices.length)
+  });
+
+
+  let bluetoothAvailability =
+    "Não verificado";
+
+
+  try {
+
+    if (
+      typeof navigator.bluetooth?.getAvailability ===
+      "function"
+    ) {
+
+      bluetoothAvailability =
+        await navigator.bluetooth.getAvailability()
+          ? "Disponível"
+          : "Indisponível";
+
+    }
+
+  } catch {
+
+    bluetoothAvailability =
+      "Erro na verificação";
+
+  }
+
+
+  checks.push({
+    label: "Bluetooth do navegador",
+    value: bluetoothAvailability
+  });
+
+
+  diagnosticContent.innerHTML = `
+
+    <div class="detail-grid">
+
+      ${
+        checks.map(
+          item => `
+
+            <div class="detail-card">
+
+              <div class="detail-label">
+                ${escapeHTML(item.label)}
+              </div>
+
+              <div class="detail-value">
+                ${escapeHTML(item.value)}
+              </div>
+
+            </div>
+
+          `
+        ).join("")
+      }
+
+    </div>
+
+
+    <p>
+      <strong>Observação:</strong>
+      o Web Bluetooth é uma API limitada quando comparada
+      ao BluetoothLeScanner nativo do Android.
+      Portanto, informações como RSSI contínuo, MAC físico
+      e lista completa de dispositivos próximos não são
+      garantidas pelo navegador.
+    </p>
+
+  `;
+
+
+  modalBackdrop.classList.add("show");
+
+}
+
+
+/* =========================================================
+   RENDER GERAL
+========================================================= */
+
+function renderAll() {
+
+  renderDeviceList();
+
+  renderRadar();
+
+  const selected =
+    state.devices.find(
+      d => d.id === state.selectedId
+    );
+
+
+  renderDetails(selected);
+
+
+  deviceCount.textContent =
+    String(state.devices.length);
+
+}
+
+
+/* =========================================================
+   LIMPAR
+========================================================= */
+
+function clearDevices() {
+
+  state.devices = [];
+
+  state.selectedId = null;
+
+  state.connectedId = null;
+
+  state.characteristics.clear();
+
+  state.notifications.clear();
+
+  renderAll();
+
+  log(
+    "Lista local de dispositivos limpa.",
+    "info"
+  );
+
+}
+
+
+/* =========================================================
+   EVENTOS UI
+========================================================= */
+
+scanBtn.addEventListener(
+  "click",
+  scanBLE
+);
+
+
+knownDevicesBtn.addEventListener(
+  "click",
+  loadKnownDevices
+);
+
+
+$("clearBtn").addEventListener(
+  "click",
+  clearDevices
+);
+
+
+$("exportBtn").addEventListener(
+  "click",
+  exportJSON
+);
+
+
+$("diagnosticBtn").addEventListener(
+  "click",
+  showDiagnostics
+);
+
+
+$("clearLogsBtn").addEventListener(
+  "click",
+  () => {
+
+    state.logs = [];
+
+    renderLogs();
+
+  }
+);
+
+
+searchInput.addEventListener(
+  "input",
+  renderAll
+);
+
+
+$("modalClose").addEventListener(
+  "click",
+  () => {
+
+    modalBackdrop.classList.remove("show");
+
+  }
+);
+
+
+modalBackdrop.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      modalBackdrop
+    ) {
+
+      modalBackdrop.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   EXPOR FUNÇÕES PARA BOTÕES
+========================================================= */
+
+window.selectDevice =
+  selectDevice;
+
+window.connectDevice =
+  connectDevice;
+
+window.disconnectDevice =
+  disconnectDevice;
+
+window.readCharacteristic =
+  readCharacteristic;
+
+window.toggleNotification =
+  toggleNotification;
+
+window.forgetDevice =
+  forgetDevice;
+
+
+/* =========================================================
+   TECLADO
+========================================================= */
+
+window.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.target.tagName === "INPUT"
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      event.key.toLowerCase() === "s"
+    ) {
+
+      scanBLE();
+
+    }
+
+
+    if (
+      event.key === "Escape"
+    ) {
+
+      modalBackdrop.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+async function init() {
+
+  log(
+    "Radar Bluetooth Scanner Pro 4.0 iniciado.",
+    "success"
+  );
+
+
+  log(
+    "Verificando compatibilidade do navegador...",
+    "info"
+  );
+
+
+  await checkCompatibility();
+
+
+  renderAll();
+
+
+  /*
+    Tenta recuperar dispositivos previamente
+    autorizados.
+
+    Se o navegador não suportar getDevices(),
+    simplesmente ignora.
+  */
+
+  if (
+    navigator.bluetooth &&
+    typeof navigator.bluetooth.getDevices ===
+      "function"
+  ) {
+
+    try {
+
+      const devices =
+        await navigator.bluetooth.getDevices();
+
+
+      for (
+        const device
+        of devices
+      ) {
+
+        addDevice(device);
+
+      }
+
+
+      if (devices.length) {
+
+        log(
+          `${devices.length} dispositivo(s) previamente autorizado(s) encontrado(s).`,
+          "success"
+        );
+
+      }
+
+    } catch {
+
+      // Sem ação.
+    }
+
+  }
+
+
+  renderAll();
+
+}
+
+
+init();
+
+
+</script>
+
+</body>
+</html>
