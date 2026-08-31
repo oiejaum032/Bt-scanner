@@ -5,32 +5,38 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
-  <meta name="theme-color" content="#020617">
+  <meta
+    name="theme-color"
+    content="#020617"
+  >
 
   <meta
     name="description"
-    content="Radar Bluetooth Scanner Pro 4.0 - Scanner BLE Web Bluetooth para Android"
+    content="Radar Bluetooth Scanner Pro - Scanner BLE Web Bluetooth com GATT, serviços, características, bateria e Heart Rate."
   >
 
-  <title>Radar Bluetooth Scanner Pro 4.0</title>
+  <title>Radar Bluetooth Scanner Pro</title>
 
   <style>
     :root {
       --bg: #020617;
       --panel: #0f172a;
-      --panel-2: #111827;
+      --panel2: #111c31;
       --border: #1e293b;
+      --border2: #334155;
       --text: #e2e8f0;
       --muted: #94a3b8;
-      --cyan: #06b6d4;
-      --cyan-light: #22d3ee;
-      --green: #22c55e;
-      --red: #ef4444;
-      --yellow: #f59e0b;
-      --purple: #a855f7;
+      --cyan: #22d3ee;
+      --cyan2: #06b6d4;
+      --green: #34d399;
+      --yellow: #fbbf24;
+      --red: #fb7185;
+      --blue: #60a5fa;
+      --purple: #a78bfa;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
     }
 
     * {
@@ -41,17 +47,14 @@
     html {
       background: var(--bg);
       color-scheme: dark;
+      scroll-behavior: smooth;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(
-          circle at top,
-          rgba(6, 182, 212, 0.08),
-          transparent 35%
-        ),
+        radial-gradient(circle at 50% -10%, rgba(6,182,212,.12), transparent 35%),
         var(--bg);
       color: var(--text);
       font-family:
@@ -65,117 +68,128 @@
 
     button,
     input,
+    textarea,
     select {
       font: inherit;
     }
 
     button {
       cursor: pointer;
-      border: 0;
     }
 
     button:disabled {
-      opacity: 0.5;
       cursor: not-allowed;
+      opacity: .5;
     }
 
-    .app {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+    ::selection {
+      background: rgba(34,211,238,.3);
+      color: white;
     }
 
-    /* HEADER */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 999px;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
 
     header {
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(2,6,23,.88);
+      backdrop-filter: blur(18px);
+    }
 
+    .header-inner {
+      max-width: 1500px;
+      margin: auto;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-
-      padding:
-        calc(12px + env(safe-area-inset-top))
-        16px
-        12px;
-
-      background: rgba(2, 6, 23, 0.94);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(18px);
+      gap: 15px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       min-width: 0;
     }
 
     .brand-logo {
-      width: 42px;
-      height: 42px;
-      flex: 0 0 42px;
-
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
       display: grid;
       place-items: center;
-
-      border-radius: 13px;
-
-      color: var(--cyan-light);
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(34, 211, 238, 0.2),
-          rgba(6, 182, 212, 0.04)
-        );
-
-      border: 1px solid rgba(34, 211, 238, 0.35);
-
-      font-size: 11px;
+      color: var(--cyan);
+      font-size: 12px;
       font-weight: 900;
-      letter-spacing: 0.5px;
+      letter-spacing: .08em;
+      border: 1px solid rgba(34,211,238,.35);
+      background: rgba(34,211,238,.1);
+      box-shadow: 0 0 30px rgba(34,211,238,.08);
+      flex-shrink: 0;
     }
 
-    .brand-title {
-      font-size: 14px;
-      font-weight: 800;
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
       color: white;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    .brand-subtitle {
-      margin-top: 2px;
-      font-size: 10px;
+    .brand p {
+      margin: 4px 0 0;
       color: var(--muted);
+      font-size: 12px;
+    }
+
+    .brand-badge {
+      display: inline-block;
+      margin-left: 7px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      color: var(--cyan);
+      background: rgba(34,211,238,.08);
+      border: 1px solid rgba(34,211,238,.25);
+      font-size: 9px;
+      vertical-align: middle;
     }
 
     .header-actions {
       display: flex;
-      gap: 7px;
-      flex-shrink: 0;
+      gap: 8px;
+      align-items: center;
     }
 
+    /* =========================
+       BUTTONS
+    ========================== */
+
     .btn {
-      min-height: 40px;
-
-      padding: 9px 13px;
-
-      border-radius: 11px;
-
+      border: 1px solid var(--border2);
+      background: #111827;
       color: var(--text);
-      background: #172033;
-      border: 1px solid #263449;
-
+      border-radius: 11px;
+      padding: 10px 13px;
       font-size: 12px;
-      font-weight: 700;
-
-      transition: 0.15s;
+      font-weight: 800;
+      transition: .18s ease;
     }
 
     .btn:hover {
@@ -183,215 +197,188 @@
     }
 
     .btn-primary {
-      color: #001018;
+      color: #001016;
       background: var(--cyan);
       border-color: var(--cyan);
+      box-shadow: 0 8px 30px rgba(34,211,238,.15);
     }
 
     .btn-primary:hover {
-      background: var(--cyan-light);
+      background: #67e8f9;
+    }
+
+    .btn-success {
+      color: #00150d;
+      background: var(--green);
+      border-color: var(--green);
     }
 
     .btn-danger {
-      color: white;
-      background: rgba(239, 68, 68, 0.15);
-      border-color: rgba(239, 68, 68, 0.4);
+      color: #fff;
+      background: rgba(251,113,133,.1);
+      border-color: rgba(251,113,133,.3);
     }
 
     .btn-small {
-      min-height: 34px;
-      padding: 7px 10px;
+      padding: 7px 9px;
       font-size: 11px;
     }
 
-    /* STATUS */
+    /* =========================
+       STATUS
+    ========================== */
 
     .status-bar {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-
-      padding: 10px 16px;
-
       border-bottom: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.65);
+      padding: 8px 18px;
+      background: rgba(15,23,42,.7);
     }
 
-    .status {
-      min-width: 0;
+    .status-inner {
+      max-width: 1500px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-      padding: 8px 10px;
+    .status-left,
+    .status-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-      border-radius: 10px;
-
-      background: #0b1220;
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 8px;
+      border-radius: 999px;
       border: 1px solid var(--border);
-    }
-
-    .status-label {
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
+      background: #0b1220;
+      font-size: 10px;
       color: var(--muted);
     }
 
-    .status-value {
-      margin-top: 3px;
-
-      font-size: 11px;
-      font-weight: 800;
-
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red);
     }
 
-    .online {
-      color: var(--green);
+    .dot.green {
+      background: var(--green);
+      box-shadow: 0 0 10px rgba(52,211,153,.5);
     }
 
-    .offline {
-      color: var(--red);
+    .dot.yellow {
+      background: var(--yellow);
     }
 
     .warning {
-      color: var(--yellow);
-    }
-
-    /* ALERT */
-
-    .alert {
-      margin: 12px 16px 0;
-
-      padding: 12px;
-
-      border-radius: 12px;
-
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .alert-warning {
+      background: rgba(251,191,36,.08);
+      border-color: rgba(251,191,36,.25);
       color: #fde68a;
-      background: rgba(245, 158, 11, 0.08);
-      border: 1px solid rgba(245, 158, 11, 0.25);
     }
 
-    .alert-success {
-      color: #bbf7d0;
-      background: rgba(34, 197, 94, 0.08);
-      border: 1px solid rgba(34, 197, 94, 0.25);
-    }
-
-    .alert-danger {
-      color: #fecaca;
-      background: rgba(239, 68, 68, 0.08);
-      border: 1px solid rgba(239, 68, 68, 0.25);
-    }
-
-    /* MAIN */
+    /* =========================
+       LAYOUT
+    ========================== */
 
     main {
-      width: 100%;
       max-width: 1500px;
+      width: 100%;
       margin: auto;
-
-      padding: 16px;
-
+      padding: 18px;
       display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 16px;
+      grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr);
+      gap: 18px;
+    }
+
+    .left-column,
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
     }
 
     .panel {
       background:
         linear-gradient(
           180deg,
-          rgba(15, 23, 42, 0.88),
-          rgba(8, 15, 29, 0.88)
+          rgba(15,23,42,.96),
+          rgba(9,16,30,.96)
         );
-
       border: 1px solid var(--border);
-      border-radius: 18px;
-
+      border-radius: 20px;
+      box-shadow: var(--shadow);
       overflow: hidden;
-
-      box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.22);
     }
 
     .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-
-      padding: 15px 16px;
-
+      padding: 16px 18px;
       border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
     }
 
     .panel-title {
+      margin: 0;
       font-size: 13px;
-      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
       color: white;
     }
 
-    .panel-description {
-      margin-top: 3px;
+    .panel-subtitle {
+      margin: 4px 0 0;
       color: var(--muted);
-      font-size: 10px;
+      font-size: 11px;
     }
 
-    .badge {
-      padding: 5px 8px;
-
-      border-radius: 8px;
-
-      color: var(--cyan-light);
-      background: rgba(6, 182, 212, 0.08);
-      border: 1px solid rgba(6, 182, 212, 0.25);
-
-      font-size: 10px;
-      font-family: monospace;
-      white-space: nowrap;
+    .panel-body {
+      padding: 18px;
     }
 
-    /* RADAR */
+    /* =========================
+       RADAR
+    ========================== */
 
-    .radar-container {
-      position: relative;
+    .radar-panel {
+      min-height: 620px;
+    }
 
-      width: min(90vw, 430px);
-      aspect-ratio: 1;
-
-      margin: 20px auto;
-
-      display: grid;
-      place-items: center;
+    .radar-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      min-height: 470px;
     }
 
     .radar {
-      position: absolute;
-      inset: 0;
-
+      position: relative;
+      width: min(78vw, 470px);
+      height: min(78vw, 470px);
+      max-width: 470px;
+      max-height: 470px;
       border-radius: 50%;
-
       background:
         radial-gradient(
           circle,
-          rgba(6, 182, 212, 0.08) 0 3%,
-          transparent 3.5% 24%,
-          rgba(6, 182, 212, 0.025) 24.5% 25%,
-          transparent 25.5% 49%,
-          rgba(6, 182, 212, 0.025) 49.5% 50%,
-          transparent 50.5% 74%,
-          rgba(6, 182, 212, 0.025) 74.5% 75%,
-          transparent 75.5%
+          rgba(6,182,212,.07) 0%,
+          rgba(6,182,212,.025) 40%,
+          transparent 72%
         );
-
-      border: 1px solid rgba(34, 211, 238, 0.25);
-
+      border: 1px solid rgba(34,211,238,.12);
       overflow: hidden;
     }
 
@@ -399,48 +386,57 @@
     .radar::after {
       content: "";
       position: absolute;
-      background: rgba(34, 211, 238, 0.15);
-    }
-
-    .radar::before {
-      width: 100%;
-      height: 1px;
-      top: 50%;
-      left: 0;
+      inset: 10%;
+      border: 1px solid rgba(34,211,238,.12);
+      border-radius: 50%;
     }
 
     .radar::after {
-      width: 1px;
-      height: 100%;
-      left: 50%;
-      top: 0;
+      inset: 25%;
     }
 
-    .sweep {
+    .cross-x,
+    .cross-y {
       position: absolute;
+      background: rgba(34,211,238,.1);
+    }
 
+    .cross-x {
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+    }
+
+    .cross-y {
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+    }
+
+    .radar-sweep {
+      position: absolute;
       width: 50%;
       height: 50%;
-
       left: 50%;
       top: 50%;
-
       transform-origin: 0 0;
-
       background:
         conic-gradient(
           from 0deg,
-          rgba(34, 211, 238, 0.45),
-          rgba(34, 211, 238, 0.04),
-          transparent 25deg
+          rgba(34,211,238,.45),
+          rgba(34,211,238,0) 38deg
         );
-
-      clip-path: polygon(0 0, 100% 0, 0 100%);
-
-      animation: sweep 3s linear infinite;
+      animation: sweep 4s linear infinite;
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
     }
 
     @keyframes sweep {
+      from {
+        transform: rotate(0deg);
+      }
+
       to {
         transform: rotate(360deg);
       }
@@ -448,535 +444,642 @@
 
     .radar-center {
       position: absolute;
-
-      width: 10px;
-      height: 10px;
-
+      left: 50%;
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      transform: translate(-50%, -50%);
+      background: var(--cyan);
       border-radius: 50%;
-
-      background: var(--cyan-light);
-
       box-shadow:
-        0 0 10px var(--cyan),
-        0 0 25px rgba(6, 182, 212, 0.5);
+        0 0 0 7px rgba(34,211,238,.08),
+        0 0 25px rgba(34,211,238,.7);
+      z-index: 5;
     }
 
-    .radar-ring {
+    .target {
       position: absolute;
-      border: 1px dashed rgba(34, 211, 238, 0.16);
+      transform: translate(-50%, -50%);
+      width: 34px;
+      height: 34px;
+      padding: 0;
       border-radius: 50%;
-    }
-
-    .ring-1 {
-      width: 25%;
-      height: 25%;
-    }
-
-    .ring-2 {
-      width: 50%;
-      height: 50%;
-    }
-
-    .ring-3 {
-      width: 75%;
-      height: 75%;
-    }
-
-    .ring-4 {
-      width: 100%;
-      height: 100%;
-    }
-
-    .device-dot {
-      position: absolute;
-
-      width: 32px;
-      height: 32px;
-
+      border: 1px solid var(--border2);
+      background: #0f172a;
+      color: var(--cyan);
+      z-index: 10;
       display: grid;
       place-items: center;
-
-      transform: translate(-50%, -50%);
-
-      border-radius: 50%;
-
-      background: #0f172a;
-      border: 1px solid rgba(34, 211, 238, 0.45);
-
-      box-shadow:
-        0 0 12px rgba(6, 182, 212, 0.2);
-
       font-size: 15px;
-
-      z-index: 10;
+      transition: .18s;
     }
 
-    .device-dot.selected {
-      background: var(--cyan);
-      color: #001018;
+    .target:hover,
+    .target.selected {
+      transform: translate(-50%, -50%) scale(1.25);
+      border-color: var(--cyan);
+      background: rgba(34,211,238,.15);
+      box-shadow: 0 0 0 5px rgba(34,211,238,.1);
+    }
 
-      border-color: var(--cyan-light);
+    .target-name {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 6px);
+      transform: translateX(-50%);
+      display: none;
+      white-space: nowrap;
+      background: #020617;
+      border: 1px solid var(--border2);
+      padding: 5px 7px;
+      border-radius: 7px;
+      color: white;
+      font-size: 9px;
+      pointer-events: none;
+    }
 
-      box-shadow:
-        0 0 0 5px rgba(34, 211, 238, 0.15),
-        0 0 20px rgba(6, 182, 212, 0.5);
+    .target:hover .target-name {
+      display: block;
     }
 
     .radar-legend {
+      padding: 0 18px 18px;
       display: flex;
-      justify-content: center;
-      gap: 18px;
-
-      padding: 0 16px 18px;
-
-      color: var(--muted);
-
-      font-size: 10px;
-    }
-
-    /* CONTROLS */
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
       gap: 8px;
-
-      padding: 0 16px 16px;
+      flex-wrap: wrap;
     }
 
-    .search {
-      width: 100%;
-
-      padding: 11px 12px;
-
-      border-radius: 10px;
-
-      color: white;
-      background: #080f1d;
+    .legend {
+      padding: 6px 9px;
+      border-radius: 8px;
+      background: #0b1220;
       border: 1px solid var(--border);
+      font-size: 10px;
+      color: var(--muted);
+    }
 
+    /* =========================
+       DEVICE LIST
+    ========================== */
+
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      color: white;
+      background: #070d19;
+      border: 1px solid var(--border);
+      border-radius: 10px;
       outline: none;
+      padding: 10px 11px;
+      font-size: 12px;
     }
 
-    .search:focus {
-      border-color: rgba(6, 182, 212, 0.6);
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: rgba(34,211,238,.5);
+      box-shadow: 0 0 0 3px rgba(34,211,238,.06);
     }
 
-    /* DEVICE LIST */
-
-    .device-list {
-      max-height: 420px;
-      overflow-y: auto;
-    }
-
-    .device {
+    .filters {
       display: flex;
-      align-items: center;
-      gap: 10px;
-
-      padding: 12px 16px;
-
-      border-bottom: 1px solid rgba(30, 41, 59, 0.7);
-
-      transition: 0.15s;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
-    .device:hover {
-      background: rgba(30, 41, 59, 0.25);
+    .filter {
+      padding: 7px 9px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0b1220;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .filter.active {
+      color: var(--cyan);
+      border-color: rgba(34,211,238,.35);
+      background: rgba(34,211,238,.07);
+    }
+
+    .devices {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 480px;
+      overflow: auto;
+    }
+
+    .device-card {
+      border: 1px solid var(--border);
+      background: rgba(2,6,23,.5);
+      border-radius: 13px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 11px;
+      transition: .18s;
+    }
+
+    .device-card:hover,
+    .device-card.selected {
+      border-color: rgba(34,211,238,.35);
+      background: rgba(34,211,238,.04);
     }
 
     .device-icon {
-      width: 38px;
-      height: 38px;
-      flex: 0 0 38px;
-
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: #111827;
       display: grid;
       place-items: center;
-
-      border-radius: 11px;
-
-      background: #111c2f;
+      font-size: 18px;
       border: 1px solid var(--border);
-
-      font-size: 17px;
-    }
-
-    .device-info {
-      min-width: 0;
-      flex: 1;
     }
 
     .device-name {
       font-size: 12px;
       font-weight: 800;
       color: white;
-
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      word-break: break-word;
     }
 
     .device-meta {
-      margin-top: 3px;
-
       color: var(--muted);
+      font-size: 10px;
+      margin-top: 4px;
+    }
 
+    .device-badges {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 7px;
+    }
+
+    .badge {
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
       font-size: 9px;
+      color: var(--muted);
+    }
 
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+    .badge.green {
+      color: var(--green);
+      border-color: rgba(52,211,153,.25);
+      background: rgba(52,211,153,.06);
+    }
+
+    .badge.cyan {
+      color: var(--cyan);
+      border-color: rgba(34,211,238,.25);
+      background: rgba(34,211,238,.06);
+    }
+
+    .badge.yellow {
+      color: var(--yellow);
+      border-color: rgba(251,191,36,.25);
+      background: rgba(251,191,36,.06);
     }
 
     .device-actions {
       display: flex;
+      flex-direction: column;
       gap: 5px;
     }
 
-    .icon-button {
-      width: 34px;
-      height: 34px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 9px;
-
-      color: var(--muted);
-      background: #111827;
-      border: 1px solid var(--border);
-
-      font-size: 13px;
-    }
-
-    .icon-button:hover {
-      color: white;
-      border-color: #334155;
-    }
-
-    /* DETAILS */
-
-    .details {
-      padding: 16px;
-    }
+    /* =========================
+       DEVICE DETAILS
+    ========================== */
 
     .empty {
-      min-height: 180px;
-
-      display: grid;
-      place-items: center;
-
-      padding: 30px;
-
       text-align: center;
-
+      padding: 45px 20px;
       color: var(--muted);
-
       font-size: 12px;
     }
 
     .device-header {
       display: flex;
-      align-items: center;
       gap: 12px;
-
-      margin-bottom: 16px;
+      align-items: center;
+      margin-bottom: 18px;
     }
 
-    .big-icon {
-      width: 50px;
-      height: 50px;
-
+    .device-big-icon {
+      width: 55px;
+      height: 55px;
       display: grid;
       place-items: center;
-
-      border-radius: 14px;
-
-      background: rgba(6, 182, 212, 0.08);
-      border: 1px solid rgba(6, 182, 212, 0.25);
-
-      font-size: 23px;
+      border-radius: 15px;
+      font-size: 25px;
+      background: rgba(34,211,238,.08);
+      border: 1px solid rgba(34,211,238,.2);
     }
 
-    .device-header h3 {
-      margin: 0;
-
+    .device-big-name {
       color: white;
-
-      font-size: 15px;
-    }
-
-    .device-header p {
-      margin: 4px 0 0;
-
-      color: var(--muted);
-
-      font-size: 10px;
-    }
-
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-
-      margin-bottom: 16px;
-    }
-
-    .detail-card {
-      padding: 10px;
-
-      border-radius: 10px;
-
-      background: #091120;
-      border: 1px solid var(--border);
-    }
-
-    .detail-label {
-      color: var(--muted);
-
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .detail-value {
-      margin-top: 4px;
-
-      color: white;
-
-      font-size: 11px;
-      font-weight: 700;
-
+      font-weight: 900;
+      font-size: 16px;
       word-break: break-word;
     }
 
-    /* SERVICES */
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      margin: 18px 0 8px;
-
-      color: white;
-
-      font-size: 11px;
-      font-weight: 800;
-
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
+    .device-id {
+      color: var(--muted);
+      font-family: monospace;
+      font-size: 9px;
+      margin-top: 5px;
+      word-break: break-all;
     }
 
-    .service {
-      margin-bottom: 8px;
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+    }
 
-      border-radius: 10px;
-
-      background: #080f1d;
+    .info-item {
       border: 1px solid var(--border);
+      background: #080f1d;
+      padding: 10px;
+      border-radius: 10px;
+      min-width: 0;
+    }
 
+    .info-label {
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .info-value {
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 4px;
+      word-break: break-word;
+    }
+
+    /* =========================
+       GATT
+    ========================== */
+
+    .service {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 8px;
       overflow: hidden;
     }
 
-    .service-header {
+    .service-head {
+      padding: 11px;
+      background: rgba(30,41,59,.35);
       display: flex;
-      align-items: center;
       justify-content: space-between;
       gap: 10px;
-
-      padding: 10px;
+      cursor: pointer;
     }
 
     .service-name {
-      color: white;
-
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 800;
+      color: white;
     }
 
-    .service-uuid {
-      margin-top: 3px;
-
-      color: var(--muted);
-
-      font-size: 8px;
+    .uuid {
+      color: var(--cyan);
       font-family: monospace;
+      font-size: 9px;
       word-break: break-all;
     }
 
-    .characteristics {
-      border-top: 1px solid var(--border);
+    .chars {
+      display: none;
+      padding: 8px;
+      background: rgba(2,6,23,.45);
+    }
+
+    .service.open .chars {
+      display: block;
     }
 
     .characteristic {
+      border: 1px solid var(--border);
+      border-radius: 9px;
       padding: 10px;
-
-      border-bottom: 1px solid rgba(30, 41, 59, 0.7);
+      margin-bottom: 6px;
     }
 
     .characteristic:last-child {
-      border-bottom: 0;
+      margin-bottom: 0;
     }
 
-    .characteristic-title {
-      color: white;
+    .char-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
 
+    .char-name {
+      color: white;
       font-size: 10px;
       font-weight: 800;
-
-      word-break: break-all;
-    }
-
-    .characteristic-uuid {
-      margin-top: 3px;
-
-      color: #64748b;
-
-      font-size: 8px;
-      font-family: monospace;
-
-      word-break: break-all;
     }
 
     .properties {
       display: flex;
-      flex-wrap: wrap;
       gap: 4px;
-
+      flex-wrap: wrap;
       margin-top: 6px;
     }
 
-    .property {
+    .prop {
       padding: 3px 5px;
-
       border-radius: 5px;
-
-      color: var(--cyan-light);
-
-      background: rgba(6, 182, 212, 0.08);
-      border: 1px solid rgba(6, 182, 212, 0.18);
-
+      background: #0b1220;
+      color: var(--muted);
+      border: 1px solid var(--border);
       font-size: 8px;
-      font-family: monospace;
-    }
-
-    .char-actions {
-      display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
-
-      margin-top: 8px;
     }
 
     .char-value {
-      margin-top: 7px;
-
-      padding: 7px;
-
-      border-radius: 7px;
-
-      color: #cbd5e1;
-
+      margin-top: 8px;
       background: #020617;
-
-      font-size: 9px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px;
+      color: var(--green);
       font-family: monospace;
-
+      font-size: 9px;
+      white-space: pre-wrap;
       word-break: break-all;
     }
 
-    /* LOG */
+    .char-buttons {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    /* =========================
+       HEART RATE
+    ========================== */
+
+    .heart-card {
+      text-align: center;
+      border: 1px solid rgba(251,113,133,.2);
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(251,113,133,.08),
+          transparent 65%
+        );
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .heart-icon {
+      font-size: 35px;
+      animation: heartbeat 1.2s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%,100% {
+        transform: scale(1);
+      }
+      20% {
+        transform: scale(1.12);
+      }
+      35% {
+        transform: scale(1);
+      }
+    }
+
+    .bpm {
+      font-size: 48px;
+      line-height: 1;
+      font-weight: 900;
+      color: white;
+      margin: 8px 0;
+    }
+
+    .bpm-label {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    /* =========================
+       BATTERY
+    ========================== */
+
+    .battery {
+      height: 9px;
+      background: #020617;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .battery-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--green);
+      transition: width .4s;
+    }
+
+    /* =========================
+       LOGS
+    ========================== */
 
     .logs {
       max-height: 240px;
-
-      overflow-y: auto;
-
-      padding: 8px 16px 16px;
+      overflow: auto;
+      font-family: monospace;
+      font-size: 9px;
     }
 
     .log {
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(30,41,59,.55);
       display: grid;
       grid-template-columns: 70px 1fr;
-      gap: 8px;
-
-      padding: 5px 0;
-
-      border-bottom: 1px solid rgba(30, 41, 59, 0.45);
-
-      font-size: 9px;
+      gap: 7px;
     }
 
     .log-time {
       color: #64748b;
-      font-family: monospace;
     }
 
-    .log-text {
-      color: #cbd5e1;
+    .log-info {
+      color: var(--muted);
     }
 
     .log-success {
-      color: #86efac;
+      color: var(--green);
     }
 
     .log-error {
-      color: #fca5a5;
+      color: var(--red);
     }
 
     .log-warning {
-      color: #fde68a;
+      color: var(--yellow);
     }
 
-    /* FOOTER */
+    /* =========================
+       MODAL
+    ========================== */
 
-    footer {
-      margin-top: auto;
-
-      padding:
-        18px
-        16px
-        calc(18px + env(safe-area-inset-bottom));
-
-      color: #64748b;
-
-      text-align: center;
-
-      font-size: 9px;
-
-      border-top: 1px solid var(--border);
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(0,0,0,.65);
+      backdrop-filter: blur(8px);
     }
 
-    /* MOBILE */
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(600px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      background: #0f172a;
+      border: 1px solid var(--border2);
+      border-radius: 18px;
+      box-shadow: 0 30px 100px rgba(0,0,0,.5);
+    }
+
+    .modal-head {
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 16px;
+    }
+
+    /* =========================
+       TOAST
+    ========================== */
+
+    #toast-container {
+      position: fixed;
+      right: 15px;
+      bottom: 15px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      max-width: min(380px, calc(100vw - 30px));
+    }
+
+    .toast {
+      padding: 11px 13px;
+      border-radius: 11px;
+      background: #0f172a;
+      border: 1px solid var(--border2);
+      color: white;
+      box-shadow: 0 15px 40px rgba(0,0,0,.35);
+      font-size: 11px;
+      animation: toastIn .2s ease-out;
+    }
+
+    .toast.success {
+      border-color: rgba(52,211,153,.3);
+    }
+
+    .toast.error {
+      border-color: rgba(251,113,133,.3);
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
 
     @media (max-width: 900px) {
       main {
         grid-template-columns: 1fr;
       }
-    }
 
-    @media (max-width: 650px) {
-      header {
+      .radar-panel {
+        min-height: auto;
+      }
+
+      .radar-wrap {
+        min-height: 350px;
+      }
+
+      .header-inner {
         align-items: flex-start;
       }
+    }
 
-      .brand-title {
-        max-width: 170px;
+    @media (max-width: 600px) {
+      .header-inner {
+        padding: 11px;
       }
 
-      .header-actions {
-        flex-direction: column;
+      .brand h1 {
+        font-size: 13px;
       }
 
-      .header-actions .btn {
-        min-height: 34px;
-        padding: 7px 9px;
+      .brand p {
         font-size: 10px;
       }
 
+      .brand-badge {
+        display: none;
+      }
+
+      .header-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .header-actions .btn-primary {
+        grid-column: span 2;
+      }
+
       .status-bar {
-        grid-template-columns: repeat(2, 1fr);
+        padding: 7px 11px;
       }
 
       main {
@@ -985,183 +1088,46 @@
       }
 
       .panel {
-        border-radius: 14px;
+        border-radius: 15px;
       }
 
-      .radar-container {
-        width: min(88vw, 380px);
+      .panel-body {
+        padding: 12px;
       }
 
-      .detail-grid {
-        grid-template-columns: 1fr 1fr;
+      .radar {
+        width: min(88vw, 390px);
+        height: min(88vw, 390px);
       }
 
-      .device {
-        padding: 10px;
+      .radar-wrap {
+        min-height: 350px;
+        padding: 12px;
+      }
+
+      .device-card {
+        grid-template-columns: auto 1fr;
       }
 
       .device-actions {
-        flex-direction: column;
-      }
-    }
-
-    @media (max-width: 400px) {
-      .brand-subtitle {
-        display: none;
+        grid-column: 1 / -1;
+        flex-direction: row;
       }
 
-      .brand-logo {
-        width: 38px;
-        height: 38px;
-        flex-basis: 38px;
+      .device-actions .btn {
+        flex: 1;
       }
 
-      .brand-title {
-        font-size: 12px;
-        max-width: 145px;
-      }
-
-      .radar-container {
-        width: 84vw;
-      }
-
-      .detail-grid {
+      .info-grid {
         grid-template-columns: 1fr;
       }
-    }
 
-    /* TOAST */
-
-    #toastContainer {
-      position: fixed;
-
-      left: 12px;
-      right: 12px;
-
-      bottom:
-        calc(12px + env(safe-area-inset-bottom));
-
-      z-index: 100;
-
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-
-      pointer-events: none;
-    }
-
-    .toast {
-      max-width: 600px;
-      margin: auto;
-      width: 100%;
-
-      padding: 12px;
-
-      border-radius: 11px;
-
-      color: white;
-
-      background: rgba(15, 23, 42, 0.96);
-
-      border: 1px solid #334155;
-
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-
-      font-size: 11px;
-
-      animation: toastIn 0.2s ease-out;
-    }
-
-    @keyframes toastIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
+      .search-row {
+        grid-template-columns: 1fr;
       }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* MODAL */
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-
-      z-index: 90;
-
-      display: none;
-      align-items: center;
-      justify-content: center;
-
-      padding: 16px;
-
-      background: rgba(0, 0, 0, 0.7);
-
-      backdrop-filter: blur(8px);
-    }
-
-    .modal-backdrop.show {
-      display: flex;
-    }
-
-    .modal {
-      width: min(100%, 560px);
-      max-height: 90vh;
-
-      overflow-y: auto;
-
-      padding: 18px;
-
-      border-radius: 16px;
-
-      background: #0f172a;
-      border: 1px solid #263449;
-
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-    }
-
-    .modal h2 {
-      margin: 0 0 12px;
-
-      color: white;
-
-      font-size: 15px;
-    }
-
-    .modal p,
-    .modal li {
-      color: #94a3b8;
-
-      font-size: 11px;
-      line-height: 1.6;
-    }
-
-    .modal-close {
-      float: right;
-    }
-
-    /* SPINNER */
-
-    .spinner {
-      display: inline-block;
-
-      width: 13px;
-      height: 13px;
-
-      border: 2px solid rgba(0, 0, 0, 0.25);
-      border-top-color: currentColor;
-
-      border-radius: 50%;
-
-      animation: spin 0.7s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
+      .panel-header {
+        padding: 13px;
       }
     }
   </style>
@@ -1169,9 +1135,8 @@
 
 <body>
 
-<div class="app">
-
-  <header>
+<header>
+  <div class="header-inner">
 
     <div class="brand">
 
@@ -1180,13 +1145,14 @@
       </div>
 
       <div>
-        <div class="brand-title">
+        <h1>
           Radar Bluetooth Scanner Pro
-        </div>
+          <span class="brand-badge">BLE / GATT</span>
+        </h1>
 
-        <div class="brand-subtitle">
-          BLE • GATT • Android • Web Bluetooth
-        </div>
+        <p>
+          Scanner BLE para Chrome Android
+        </p>
       </div>
 
     </div>
@@ -1194,1050 +1160,1015 @@
     <div class="header-actions">
 
       <button
-        id="knownDevicesBtn"
         class="btn"
+        id="btnGranted"
+        type="button"
       >
-        📱 Autorizados
+        Dispositivos autorizados
       </button>
 
       <button
-        id="scanBtn"
+        class="btn"
+        id="btnClear"
+        type="button"
+      >
+        Limpar
+      </button>
+
+      <button
         class="btn btn-primary"
+        id="btnScan"
+        type="button"
       >
         ⚡ Escanear BLE
       </button>
 
     </div>
 
-  </header>
+  </div>
+</header>
 
+<div class="status-bar">
 
-  <!-- STATUS -->
+  <div class="status-inner">
 
-  <div class="status-bar">
+    <div class="status-left">
 
-    <div class="status">
-
-      <div class="status-label">
-        API
+      <div class="status-pill">
+        <span class="dot" id="browserDot"></span>
+        <span id="browserStatus">
+          Verificando Web Bluetooth...
+        </span>
       </div>
 
-      <div
-        id="apiStatus"
-        class="status-value warning"
-      >
-        Verificando...
+      <div class="status-pill">
+        <span class="dot" id="bluetoothDot"></span>
+        <span id="bluetoothStatus">
+          Bluetooth não verificado
+        </span>
       </div>
 
-    </div>
-
-    <div class="status">
-
-      <div class="status-label">
-        HTTPS
-      </div>
-
-      <div
-        id="httpsStatus"
-        class="status-value"
-      >
-        -
+      <div class="status-pill">
+        <span class="dot" id="secureDot"></span>
+        <span id="secureStatus">
+          HTTPS não verificado
+        </span>
       </div>
 
     </div>
 
-    <div class="status">
+    <div class="status-right">
 
-      <div class="status-label">
-        Bluetooth
+      <div class="status-pill">
+        Dispositivos:
+        <strong id="deviceCount">0</strong>
       </div>
 
-      <div
-        id="bluetoothStatus"
-        class="status-value"
-      >
-        -
-      </div>
-
-    </div>
-
-    <div class="status">
-
-      <div class="status-label">
-        Dispositivos
-      </div>
-
-      <div
-        id="deviceCount"
-        class="status-value online"
-      >
-        0
+      <div class="status-pill">
+        <span id="connectionStatus">
+          Desconectado
+        </span>
       </div>
 
     </div>
 
   </div>
 
+</div>
 
-  <!-- ALERT -->
+<main>
 
-  <div
-    id="compatibilityAlert"
-    class="alert alert-warning"
-  >
-    Verificando compatibilidade...
-  </div>
+  <!-- ======================================================
+       ESQUERDA
+  ======================================================= -->
 
-
-  <!-- MAIN -->
-
-  <main>
+  <section class="left-column">
 
     <!-- RADAR -->
 
-    <section class="panel">
+    <div class="panel radar-panel">
 
       <div class="panel-header">
 
         <div>
-          <div class="panel-title">
+          <h2 class="panel-title">
             Radar BLE
-          </div>
+          </h2>
 
-          <div class="panel-description">
-            Visualização dos dispositivos autorizados
-          </div>
+          <p class="panel-subtitle">
+            Visualização dos dispositivos autorizados pelo navegador
+          </p>
         </div>
+
+        <div class="status-pill">
+          <span id="radarCount">
+            0 alvos
+          </span>
+        </div>
+
+      </div>
+
+      <div class="radar-wrap">
 
         <div
-          id="targetBadge"
-          class="badge"
+          class="radar"
+          id="radar"
         >
-          0 ALVOS
-        </div>
 
-      </div>
+          <div class="cross-x"></div>
+          <div class="cross-y"></div>
 
+          <div class="radar-sweep"></div>
 
-      <div
-        id="radarContainer"
-        class="radar-container"
-      >
-
-        <div class="radar">
-
-          <div class="radar-ring ring-1"></div>
-          <div class="radar-ring ring-2"></div>
-          <div class="radar-ring ring-3"></div>
-          <div class="radar-ring ring-4"></div>
-
-          <div class="sweep"></div>
+          <div class="radar-center"></div>
 
         </div>
 
-        <div class="radar-center"></div>
-
       </div>
-
 
       <div class="radar-legend">
 
-        <span>
-          ● Dispositivo
-        </span>
+        <div class="legend">
+          🔵 BLE autorizado
+        </div>
 
-        <span>
-          ◎ Centro
-        </span>
+        <div class="legend">
+          🟢 Conectado
+        </div>
 
-        <span>
-          BLE
-        </span>
+        <div class="legend">
+          ❤️ Heart Rate
+        </div>
 
-      </div>
+        <div class="legend">
+          🔋 Battery
+        </div>
 
-
-      <div class="controls">
-
-        <input
-          id="searchInput"
-          class="search"
-          type="search"
-          placeholder="Pesquisar dispositivo ou ID..."
-          autocomplete="off"
-        >
-
-        <button
-          id="clearBtn"
-          class="btn btn-small"
-        >
-          🗑 Limpar
-        </button>
-
-        <button
-          id="exportBtn"
-          class="btn btn-small"
-        >
-          ⬇ Exportar JSON
-        </button>
-
-        <button
-          id="diagnosticBtn"
-          class="btn btn-small"
-        >
-          🔎 Diagnóstico
-        </button>
+        <div class="legend">
+          ⚠️ Radar não representa distância/RSSI real
+        </div>
 
       </div>
 
-    </section>
+    </div>
 
+    <!-- DISPOSITIVOS -->
 
-    <!-- DEVICES / DETAILS -->
-
-    <section class="panel">
+    <div class="panel">
 
       <div class="panel-header">
 
         <div>
-
-          <div class="panel-title">
+          <h2 class="panel-title">
             Dispositivos
-          </div>
+          </h2>
 
-          <div class="panel-description">
-            BLE encontrados e autorizados
-          </div>
+          <p class="panel-subtitle">
+            Dispositivos BLE selecionados no Chrome
+          </p>
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="search-row">
+
+          <input
+            id="search"
+            type="search"
+            placeholder="Pesquisar por nome ou ID..."
+            autocomplete="off"
+          >
+
+          <select id="sort">
+
+            <option value="name">
+              Nome
+            </option>
+
+            <option value="connection">
+              Conexão
+            </option>
+
+          </select>
 
         </div>
 
         <div
-          id="selectedBadge"
-          class="badge"
+          class="filters"
+          id="filters"
         >
-          NENHUM
+
+          <button
+            class="filter active"
+            data-filter="all"
+            type="button"
+          >
+            Todos
+          </button>
+
+          <button
+            class="filter"
+            data-filter="connected"
+            type="button"
+          >
+            Conectados
+          </button>
+
+          <button
+            class="filter"
+            data-filter="heart"
+            type="button"
+          >
+            Heart Rate
+          </button>
+
+          <button
+            class="filter"
+            data-filter="battery"
+            type="button"
+          >
+            Bateria
+          </button>
+
+        </div>
+
+        <div
+          class="devices"
+          id="devices"
+        >
+
+          <div class="empty">
+            Nenhum dispositivo autorizado.
+            <br><br>
+            Toque em <strong>Escanear BLE</strong>.
+          </div>
+
         </div>
 
       </div>
 
+    </div>
 
-      <div
-        id="deviceList"
-        class="device-list"
-      ></div>
+    <!-- LOGS -->
 
-
-      <div
-        id="details"
-        class="details"
-      >
-
-        <div class="empty">
-          Selecione um dispositivo para visualizar informações, conectar ao GATT e descobrir serviços.
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- LOG -->
-
-    <section class="panel">
+    <div class="panel">
 
       <div class="panel-header">
 
         <div>
+          <h2 class="panel-title">
+            Log do sistema
+          </h2>
 
-          <div class="panel-title">
-            Log do Scanner
-          </div>
-
-          <div class="panel-description">
-            Eventos e diagnóstico em tempo real
-          </div>
-
+          <p class="panel-subtitle">
+            Eventos Web Bluetooth / GATT
+          </p>
         </div>
 
         <button
-          id="clearLogsBtn"
           class="btn btn-small"
+          id="btnClearLogs"
+          type="button"
         >
-          Limpar
+          Limpar logs
         </button>
 
       </div>
 
+      <div class="panel-body">
+
+        <div
+          class="logs"
+          id="logs"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ======================================================
+       DIREITA
+  ======================================================= -->
+
+  <section class="right-column">
+
+    <!-- DETALHES -->
+
+    <div class="panel">
+
+      <div class="panel-header">
+
+        <div>
+          <h2 class="panel-title">
+            Dispositivo selecionado
+          </h2>
+
+          <p class="panel-subtitle">
+            Informações e conexão GATT
+          </p>
+        </div>
+
+      </div>
+
       <div
-        id="logs"
-        class="logs"
-      ></div>
+        class="panel-body"
+        id="details"
+      >
 
-    </section>
+        <div class="empty">
+          Selecione um dispositivo para visualizar os detalhes.
+        </div>
 
-  </main>
+      </div>
 
+    </div>
 
-  <footer>
-    Radar Bluetooth Scanner Pro 4.0 • Web Bluetooth BLE • Android
-  </footer>
+    <!-- HEART RATE -->
 
-</div>
+    <div class="panel">
 
+      <div class="panel-header">
 
-<div id="toastContainer"></div>
+        <div>
+          <h2 class="panel-title">
+            Heart Rate
+          </h2>
 
+          <p class="panel-subtitle">
+            Serviço BLE 0x180D / característica 0x2A37
+          </p>
+        </div>
 
-<!-- MODAL DIAGNÓSTICO -->
+      </div>
+
+      <div class="panel-body">
+
+        <div class="heart-card">
+
+          <div class="heart-icon">
+            ❤️
+          </div>
+
+          <div
+            class="bpm"
+            id="bpm"
+          >
+            --
+          </div>
+
+          <div class="bpm-label">
+            BPM
+          </div>
+
+          <div
+            id="heartStatus"
+            style="
+              margin-top:10px;
+              color:#94a3b8;
+              font-size:10px;
+            "
+          >
+            Heart Rate não conectado
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- BATERIA -->
+
+    <div class="panel">
+
+      <div class="panel-header">
+
+        <div>
+          <h2 class="panel-title">
+            Bateria
+          </h2>
+
+          <p class="panel-subtitle">
+            Battery Service / Battery Level
+          </p>
+        </div>
+
+        <strong id="batteryText">
+          --
+        </strong>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="battery">
+
+          <div
+            class="battery-fill"
+            id="batteryFill"
+          ></div>
+
+        </div>
+
+        <div
+          id="batteryStatus"
+          style="
+            margin-top:8px;
+            color:#94a3b8;
+            font-size:10px;
+          "
+        >
+          Nenhuma bateria disponível.
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- GATT -->
+
+    <div class="panel">
+
+      <div class="panel-header">
+
+        <div>
+          <h2 class="panel-title">
+            GATT Explorer
+          </h2>
+
+          <p class="panel-subtitle">
+            Serviços e características descobertos
+          </p>
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div id="gatt">
+
+          <div class="empty">
+            Conecte um dispositivo para descobrir o GATT.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- MODAL -->
 
 <div
-  id="modalBackdrop"
-  class="modal-backdrop"
+  class="modal"
+  id="modal"
 >
 
-  <div class="modal">
+  <div class="modal-box">
 
-    <button
-      id="modalClose"
-      class="btn btn-small modal-close"
-    >
-      Fechar
-    </button>
+    <div class="modal-head">
 
-    <h2>
-      Diagnóstico do aparelho
-    </h2>
+      <strong id="modalTitle">
+        Informações
+      </strong>
 
-    <div id="diagnosticContent"></div>
+      <button
+        class="btn btn-small"
+        id="modalClose"
+        type="button"
+      >
+        Fechar
+      </button>
+
+    </div>
+
+    <div
+      class="modal-body"
+      id="modalBody"
+    ></div>
 
   </div>
 
 </div>
 
+<div id="toast-container"></div>
 
 <script>
-
 "use strict";
 
-/*
-===========================================================
- RADAR BLUETOOTH SCANNER PRO 4.0
- Web Bluetooth / BLE / Android
-===========================================================
-
- IMPORTANTE:
-
- Este aplicativo NÃO finge ser um scanner BLE nativo.
-
- A Web Bluetooth API possui limitações.
-
- requestDevice():
- - abre o seletor Bluetooth;
- - exige ação do usuário;
- - entrega o dispositivo selecionado;
- - permite acessar GATT se autorizado.
-
- O navegador não entrega uma lista contínua universal
- de todos os BLE próximos.
-
- RSSI também não é garantido pela Web Bluetooth.
- Portanto este projeto NÃO inventa RSSI.
-
-===========================================================
-*/
+/* ==========================================================
+   RADAR BLUETOOTH SCANNER PRO
+   Versão revisada para Web Bluetooth / Chrome Android
+========================================================== */
 
 
-/* =========================================================
-   ESTADO
-========================================================= */
+/* ==========================================================
+   UUIDS
+========================================================== */
 
-const state = {
+const UUID = {
 
-  devices: [],
+  // Services
+  GENERIC_ACCESS: "00001800-0000-1000-8000-00805f9b34fb",
+  GENERIC_ATTRIBUTE: "00001801-0000-1000-8000-00805f9b34fb",
 
-  selectedId: null,
+  DEVICE_INFORMATION:
+    "0000180a-0000-1000-8000-00805f9b34fb",
 
-  connectedId: null,
+  HEART_RATE:
+    "0000180d-0000-1000-8000-00805f9b34fb",
 
-  scanning: false,
+  BATTERY:
+    "0000180f-0000-1000-8000-00805f9b34fb",
 
-  muted: false,
+  HID:
+    "00001812-0000-1000-8000-00805f9b34fb",
 
-  logs: [],
+  HEALTH_THERMOMETER:
+    "00001809-0000-1000-8000-00805f9b34fb",
 
-  characteristics: new Map(),
+  BLOOD_PRESSURE:
+    "00001810-0000-1000-8000-00805f9b34fb",
 
-  services: new Map(),
+  PULSE_OXIMETER:
+    "00001822-0000-1000-8000-00805f9b34fb",
 
-  notifications: new Map()
+  ENVIRONMENTAL:
+    "0000181a-0000-1000-8000-00805f9b34fb",
 
+  CYCLING_POWER:
+    "00001818-0000-1000-8000-00805f9b34fb",
+
+  RUNNING_SPEED:
+    "00001814-0000-1000-8000-00805f9b34fb",
+
+  LOCATION_NAVIGATION:
+    "00001819-0000-1000-8000-00805f9b34fb",
+
+  CURRENT_TIME:
+    "00001805-0000-1000-8000-00805f9b34fb",
+
+  // Characteristics
+  DEVICE_NAME:
+    "00002a00-0000-1000-8000-00805f9b34fb",
+
+  BATTERY_LEVEL:
+    "00002a19-0000-1000-8000-00805f9b34fb",
+
+  HEART_RATE_MEASUREMENT:
+    "00002a37-0000-1000-8000-00805f9b34fb",
+
+  BODY_SENSOR_LOCATION:
+    "00002a38-0000-1000-8000-00805f9b34fb",
+
+  MANUFACTURER_NAME:
+    "00002a29-0000-1000-8000-00805f9b34fb",
+
+  MODEL_NUMBER:
+    "00002a24-0000-1000-8000-00805f9b34fb",
+
+  SERIAL_NUMBER:
+    "00002a25-0000-1000-8000-00805f9b34fb",
+
+  HARDWARE_REVISION:
+    "00002a27-0000-1000-8000-00805f9b34fb",
+
+  FIRMWARE_REVISION:
+    "00002a26-0000-1000-8000-00805f9b34fb",
+
+  SOFTWARE_REVISION:
+    "00002a28-0000-1000-8000-00805f9b34fb"
 };
 
 
-/* =========================================================
-   SERVIÇOS BLE IMPORTANTES
-========================================================= */
+/* ==========================================================
+   SERVIÇOS OPCIONAIS
+========================================================== */
 
-const STANDARD_SERVICES = [
+const OPTIONAL_SERVICES = [
 
-  "generic_access",
+  UUID.GENERIC_ACCESS,
+  UUID.GENERIC_ATTRIBUTE,
 
-  "generic_attribute",
+  UUID.DEVICE_INFORMATION,
 
-  "battery_service",
+  UUID.HEART_RATE,
 
-  "device_information",
+  UUID.BATTERY,
 
-  "heart_rate",
+  UUID.HID,
 
-  "heart_rate_measurement",
+  UUID.HEALTH_THERMOMETER,
 
-  "health_thermometer",
+  UUID.BLOOD_PRESSURE,
 
-  "blood_pressure",
+  UUID.PULSE_OXIMETER,
 
-  "cycling_power",
+  UUID.ENVIRONMENTAL,
 
-  "cycling_speed_and_cadence",
+  UUID.CYCLING_POWER,
 
-  "current_time",
+  UUID.RUNNING_SPEED,
 
-  "current_time_service",
+  UUID.LOCATION_NAVIGATION,
 
-  "human_interface_device",
-
-  "tx_power",
-
-  "immediate_alert",
-
-  "link_loss",
-
-  "scan_parameters",
-
-  "running_speed_and_cadence",
-
-  "glucose",
-
-  "pulse_oximeter",
-
-  "weight_scale",
-
-  "environmental_sensing",
-
-  "automation_io",
-
-  "current_time",
-
-  "reference_time_information",
-
-  "phone_alert_status",
-
-  "alert_notification",
-
-  "location_and_navigation",
-
-  "object_transfer_service"
-
+  UUID.CURRENT_TIME
 ];
 
 
-/* =========================================================
-   UUIDS CONHECIDOS
-========================================================= */
+/* ==========================================================
+   NOMES CONHECIDOS
+========================================================== */
 
-const UUID_NAMES = {
+const SERVICE_NAMES = {
 
-  "00001800-0000-1000-8000-00805f9b34fb":
-    "Generic Access",
+  "1800": "Generic Access",
 
-  "00001801-0000-1000-8000-00805f9b34fb":
-    "Generic Attribute",
+  "1801": "Generic Attribute",
 
-  "0000180f-0000-1000-8000-00805f9b34fb":
-    "Battery Service",
+  "1805": "Current Time",
 
-  "0000180a-0000-1000-8000-00805f9b34fb":
-    "Device Information",
+  "1809": "Health Thermometer",
 
-  "0000180d-0000-1000-8000-00805f9b34fb":
-    "Heart Rate",
+  "180a": "Device Information",
 
-  "00001812-0000-1000-8000-00805f9b34fb":
-    "Human Interface Device",
+  "180d": "Heart Rate",
 
-  "00001809-0000-1000-8000-00805f9b34fb":
-    "Health Thermometer",
+  "180f": "Battery",
 
-  "00001810-0000-1000-8000-00805f9b34fb":
-    "Blood Pressure",
+  "1810": "Blood Pressure",
 
-  "0000181a-0000-1000-8000-00805f9b34fb":
-    "Environmental Sensing"
+  "1812": "Human Interface Device",
 
+  "1814": "Running Speed and Cadence",
+
+  "1818": "Cycling Power",
+
+  "1819": "Location and Navigation",
+
+  "181a": "Environmental Sensing",
+
+  "1822": "Pulse Oximeter"
 };
 
 
-/* =========================================================
+const CHARACTERISTIC_NAMES = {
+
+  "2a00": "Device Name",
+
+  "2a19": "Battery Level",
+
+  "2a24": "Model Number String",
+
+  "2a25": "Serial Number String",
+
+  "2a26": "Firmware Revision String",
+
+  "2a27": "Hardware Revision String",
+
+  "2a28": "Software Revision String",
+
+  "2a29": "Manufacturer Name String",
+
+  "2a37": "Heart Rate Measurement",
+
+  "2a38": "Body Sensor Location"
+};
+
+
+/* ==========================================================
+   ESTADO
+========================================================== */
+
+const state = {
+
+  devices: new Map(),
+
+  selectedId: null,
+
+  filter: "all",
+
+  search: "",
+
+  sort: "name",
+
+  scanning: false,
+
+  connected: null,
+
+  services: [],
+
+  heartCharacteristic: null,
+
+  batteryCharacteristic: null,
+
+  heartHandler: null,
+
+  batteryHandler: null,
+
+  audioContext: null
+};
+
+
+/* ==========================================================
    ELEMENTOS
-========================================================= */
+========================================================== */
 
 const $ = id => document.getElementById(id);
 
-const scanBtn = $("scanBtn");
 
-const knownDevicesBtn = $("knownDevicesBtn");
-
-const deviceList = $("deviceList");
-
-const details = $("details");
-
-const logsElement = $("logs");
-
-const searchInput = $("searchInput");
-
-const deviceCount = $("deviceCount");
-
-const targetBadge = $("targetBadge");
-
-const selectedBadge = $("selectedBadge");
-
-const apiStatus = $("apiStatus");
-
-const httpsStatus = $("httpsStatus");
-
-const bluetoothStatus = $("bluetoothStatus");
-
-const compatibilityAlert = $("compatibilityAlert");
-
-const modalBackdrop = $("modalBackdrop");
-
-const diagnosticContent = $("diagnosticContent");
-
-const toastContainer = $("toastContainer");
-
-
-/* =========================================================
-   UTILITÁRIOS
-========================================================= */
-
-function now() {
-
-  return new Date().toLocaleTimeString("pt-BR");
-
-}
-
-
-function escapeHTML(value) {
-
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
-
-
-function uuidName(uuid) {
-
-  const key = String(uuid).toLowerCase();
-
-  return UUID_NAMES[key] || "Serviço BLE";
-
-
-}
-
-
-function showToast(message) {
-
-  const toast = document.createElement("div");
-
-  toast.className = "toast";
-
-  toast.textContent = message;
-
-  toastContainer.appendChild(toast);
-
-  setTimeout(() => {
-
-    toast.remove();
-
-  }, 3500);
-
-}
-
+/* ==========================================================
+   LOG
+========================================================== */
 
 function log(message, type = "info") {
 
-  const entry = {
+  const container = $("logs");
 
-    time: now(),
+  const now = new Date();
 
-    message,
+  const time =
+    now.toLocaleTimeString("pt-BR");
 
-    type
+  const row =
+    document.createElement("div");
 
-  };
+  row.className =
+    "log";
 
-  state.logs.unshift(entry);
+  row.innerHTML = `
+    <span class="log-time">${escapeHtml(time)}</span>
+    <span class="log-${type}">
+      ${escapeHtml(message)}
+    </span>
+  `;
 
-  state.logs = state.logs.slice(0, 200);
+  container.prepend(row);
 
-  renderLogs();
-
+  while (container.children.length > 100) {
+    container.lastElementChild.remove();
+  }
 }
 
 
-function renderLogs() {
+function toast(message, type = "info") {
 
-  logsElement.innerHTML = state.logs.map(item => {
+  const container =
+    $("toast-container");
 
-    const cls =
-      item.type === "error"
-        ? "log-error"
-        : item.type === "success"
-        ? "log-success"
-        : item.type === "warning"
-        ? "log-warning"
-        : "";
+  const item =
+    document.createElement("div");
 
-    return `
-      <div class="log">
+  item.className =
+    "toast " + type;
 
-        <div class="log-time">
-          ${escapeHTML(item.time)}
-        </div>
+  item.textContent =
+    message;
 
-        <div class="log-text ${cls}">
-          ${escapeHTML(item.message)}
-        </div>
+  container.appendChild(item);
 
-      </div>
-    `;
+  setTimeout(() => {
 
-  }).join("");
+    item.remove();
 
+  }, 4000);
 }
 
 
-function setStatus(element, text, className) {
+/* ==========================================================
+   ESCAPE HTML
+========================================================== */
 
-  element.textContent = text;
+function escapeHtml(value) {
 
-  element.className =
-    "status-value " + className;
-
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 
-/* =========================================================
-   DETECÇÃO DO NAVEGADOR
-========================================================= */
+/* ==========================================================
+   SOM
+========================================================== */
 
-function isAndroid() {
+function beep(frequency = 800) {
 
-  return /Android/i.test(navigator.userAgent);
+  try {
 
+    if (!state.audioContext) {
+
+      state.audioContext =
+        new (
+          window.AudioContext ||
+          window.webkitAudioContext
+        )();
+
+    }
+
+    const ctx =
+      state.audioContext;
+
+    const oscillator =
+      ctx.createOscillator();
+
+    const gain =
+      ctx.createGain();
+
+    oscillator.type =
+      "sine";
+
+    oscillator.frequency.value =
+      frequency;
+
+    gain.gain.setValueAtTime(
+      0.04,
+      ctx.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      ctx.currentTime + .18
+    );
+
+    oscillator.connect(gain);
+
+    gain.connect(ctx.destination);
+
+    oscillator.start();
+
+    oscillator.stop(
+      ctx.currentTime + .18
+    );
+
+  } catch (_) {}
 }
 
 
-function browserName() {
+/* ==========================================================
+   CAPACIDADE DO NAVEGADOR
+========================================================== */
 
-  const ua = navigator.userAgent;
-
-  if (/EdgA/i.test(ua)) return "Microsoft Edge Android";
-
-  if (/OPR/i.test(ua)) return "Opera Android";
-
-  if (/Chrome/i.test(ua)) return "Google Chrome";
-
-  return "Navegador não identificado";
-
-}
-
-
-/* =========================================================
-   COMPATIBILIDADE
-========================================================= */
-
-async function checkCompatibility() {
-
-  const secure =
-    window.isSecureContext === true;
+async function checkBrowser() {
 
   const supported =
     "bluetooth" in navigator;
 
-  setStatus(
-    httpsStatus,
-    secure ? "Seguro" : "Não seguro",
-    secure ? "online" : "offline"
-  );
+  const secure =
+    window.isSecureContext;
 
-  setStatus(
-    apiStatus,
-    supported ? "Disponível" : "Indisponível",
-    supported ? "online" : "offline"
-  );
+  if (supported) {
 
-  if (!secure) {
+    $("browserDot")
+      .className = "dot green";
 
-    compatibilityAlert.className =
-      "alert alert-danger";
+    $("browserStatus").textContent =
+      "Web Bluetooth disponível";
 
-    compatibilityAlert.innerHTML = `
-      <strong>HTTPS necessário.</strong><br>
-      O Web Bluetooth funciona somente em contexto seguro.
-      Abra este projeto através de um endereço HTTPS.
-    `;
+  } else {
 
-    setStatus(
-      bluetoothStatus,
-      "Bloqueado",
-      "offline"
-    );
+    $("browserDot")
+      .className = "dot";
 
-    return;
+    $("browserStatus").textContent =
+      "Web Bluetooth não disponível";
 
   }
 
 
-  if (!supported) {
+  if (secure) {
 
-    compatibilityAlert.className =
-      "alert alert-danger";
+    $("secureDot")
+      .className = "dot green";
 
-    compatibilityAlert.innerHTML = `
-      <strong>Web Bluetooth não disponível.</strong><br>
-      Use Google Chrome no Android e certifique-se de que
-      o aparelho possui Bluetooth.
-    `;
+    $("secureStatus").textContent =
+      "Contexto seguro";
 
-    setStatus(
-      bluetoothStatus,
-      "Indisponível",
-      "offline"
-    );
+  } else {
 
-    return;
+    $("secureDot")
+      .className = "dot";
+
+    $("secureStatus").textContent =
+      "HTTPS necessário";
 
   }
 
 
-  try {
+  if (
+    supported &&
+    typeof navigator.bluetooth.getAvailability === "function"
+  ) {
 
-    if (
-      typeof navigator.bluetooth.getAvailability ===
-      "function"
-    ) {
+    try {
 
       const available =
         await navigator.bluetooth.getAvailability();
 
-      setStatus(
-        bluetoothStatus,
-        available ? "Disponível" : "Indisponível",
-        available ? "online" : "warning"
-      );
+      if (available) {
 
-      if (!available) {
+        $("bluetoothDot")
+          .className = "dot green";
 
-        compatibilityAlert.className =
-          "alert alert-warning";
+        $("bluetoothStatus").textContent =
+          "Bluetooth disponível";
 
-        compatibilityAlert.innerHTML = `
-          Bluetooth não está disponível para o navegador.
-          Verifique se o Bluetooth do Android está ligado.
-        `;
+      } else {
 
-        return;
+        $("bluetoothDot")
+          .className = "dot yellow";
+
+        $("bluetoothStatus").textContent =
+          "Bluetooth indisponível";
 
       }
 
-    } else {
+    } catch (error) {
 
-      setStatus(
-        bluetoothStatus,
-        "API disponível",
-        "online"
-      );
+      $("bluetoothStatus").textContent =
+        "Bluetooth não verificado";
 
     }
 
-  } catch (error) {
+  } else {
 
-    setStatus(
-      bluetoothStatus,
-      "Verificação limitada",
-      "warning"
-    );
+    $("bluetoothStatus").textContent =
+      "API indisponível";
 
   }
-
-
-  compatibilityAlert.className =
-    "alert alert-success";
-
-  compatibilityAlert.innerHTML = `
-    <strong>Web Bluetooth pronto.</strong><br>
-    ${escapeHTML(browserName())}
-    ${isAndroid() ? " • Android detectado" : ""}
-    • Use "Escanear BLE" para abrir o seletor de dispositivos.
-  `;
-
 }
 
 
-/* =========================================================
-   ÍCONE
-========================================================= */
-
-function deviceIcon(device) {
-
-  const name =
-    (device.name || "").toLowerCase();
-
-  if (
-    name.includes("headphone") ||
-    name.includes("headset") ||
-    name.includes("buds") ||
-    name.includes("airpods") ||
-    name.includes("sony") ||
-    name.includes("jbl")
-  ) {
-    return "🎧";
-  }
-
-  if (
-    name.includes("keyboard") ||
-    name.includes("teclado")
-  ) {
-    return "⌨️";
-  }
-
-  if (
-    name.includes("mouse")
-  ) {
-    return "🖱️";
-  }
-
-  if (
-    name.includes("watch") ||
-    name.includes("band")
-  ) {
-    return "⌚";
-  }
-
-  if (
-    name.includes("phone") ||
-    name.includes("android") ||
-    name.includes("iphone")
-  ) {
-    return "📱";
-  }
-
-  if (
-    name.includes("sensor") ||
-    name.includes("temperature") ||
-    name.includes("thermo")
-  ) {
-    return "🌡️";
-  }
-
-  return "📡";
-
-}
-
-
-/* =========================================================
-   ADICIONAR DISPOSITIVO
-========================================================= */
-
-function normalizeDevice(device) {
-
-  return {
-
-    id: device.id,
-
-    name:
-      device.name &&
-      device.name.trim()
-        ? device.name.trim()
-        : "Nome não anunciado",
-
-    rawDevice: device,
-
-    connected:
-      !!device.gatt?.connected,
-
-    discovered: false,
-
-    battery: null,
-
-    services: [],
-
-    lastSeen: now(),
-
-    simulated: false
-
-  };
-
-}
-
-
-function addDevice(rawDevice) {
-
-  const normalized =
-    normalizeDevice(rawDevice);
-
-  const existing =
-    state.devices.find(
-      d => d.id === normalized.id
-    );
-
-  if (existing) {
-
-    existing.rawDevice = rawDevice;
-
-    if (
-      rawDevice.name &&
-      rawDevice.name.trim()
-    ) {
-
-      existing.name =
-        rawDevice.name.trim();
-
-    }
-
-    existing.connected =
-      !!rawDevice.gatt?.connected;
-
-    existing.lastSeen = now();
-
-    renderAll();
-
-    return existing;
-
-  }
-
-
-  state.devices.unshift(normalized);
-
-  state.selectedId =
-    normalized.id;
-
-  attachDeviceEvents(normalized);
-
-  renderAll();
-
-  return normalized;
-
-}
-
-
-/* =========================================================
-   EVENTOS DO DISPOSITIVO
-========================================================= */
-
-function attachDeviceEvents(device) {
-
-  const raw = device.rawDevice;
-
-  if (!raw) return;
-
-  raw.addEventListener(
-    "gattserverdisconnected",
-    () => {
-
-      device.connected = false;
-
-      if (
-        state.connectedId === device.id
-      ) {
-
-        state.connectedId = null;
-
-      }
-
-      log(
-        `GATT desconectado: ${device.name}`,
-        "warning"
-      );
-
-      renderAll();
-
-    }
-  );
-
-
-  /*
-    advertisementreceived pode existir em alguns
-    navegadores/dispositivos.
-
-    Não dependemos dele para o funcionamento.
-  */
-
-  raw.addEventListener?.(
-    "advertisementreceived",
-    event => {
-
-      device.lastSeen = now();
-
-      if (
-        typeof event.rssi === "number"
-      ) {
-
-        device.rssi = event.rssi;
-
-      }
-
-      renderAll();
-
-    }
-  );
-
-}
-
-
-/* =========================================================
+/* ==========================================================
    SCAN
-========================================================= */
+========================================================== */
 
-async function scanBLE() {
+async function scan() {
 
-  if (state.scanning) return;
+  if (state.scanning) {
+    return;
+  }
 
-  if (
-    !window.isSecureContext ||
-    !("bluetooth" in navigator)
-  ) {
+  if (!("bluetooth" in navigator)) {
 
-    showToast(
-      "Web Bluetooth não está disponível neste contexto."
+    showBrowserError();
+
+    return;
+  }
+
+  if (!window.isSecureContext) {
+
+    toast(
+      "Abra o site usando HTTPS para utilizar Web Bluetooth.",
+      "error"
+    );
+
+    log(
+      "Web Bluetooth bloqueado: contexto não seguro.",
+      "error"
     );
 
     return;
-
   }
 
 
   state.scanning = true;
 
-  scanBtn.disabled = true;
+  $("btnScan").disabled = true;
 
-  scanBtn.innerHTML = `
-    <span class="spinner"></span>
-    Procurando...
-  `;
-
-  log(
-    "Abrindo seletor BLE do Chrome...",
-    "info"
-  );
+  $("btnScan").textContent =
+    "⏳ Abrindo Bluetooth...";
 
 
   try {
+
+    beep(1000);
+
+    log(
+      "Abrindo seletor nativo Web Bluetooth...",
+      "info"
+    );
+
+
+    /*
+      IMPORTANTE:
+
+      heart_rate é um SERVICE.
+
+      heart_rate_measurement é uma CHARACTERISTIC.
+
+      NÃO colocar heart_rate_measurement em optionalServices.
+    */
 
     const device =
       await navigator.bluetooth.requestDevice({
@@ -2245,7 +2176,7 @@ async function scanBLE() {
         acceptAllDevices: true,
 
         optionalServices:
-          STANDARD_SERVICES
+          OPTIONAL_SERVICES
 
       });
 
@@ -2253,73 +2184,45 @@ async function scanBLE() {
     if (!device) {
 
       throw new Error(
-        "Nenhum dispositivo retornado."
+        "Nenhum dispositivo foi retornado."
       );
 
     }
 
 
-    const normalized =
-      addDevice(device);
+    registerDevice(device);
 
+    selectDevice(device.id);
+
+    beep(1200);
 
     log(
-      `Dispositivo autorizado: ${normalized.name}`,
+      `Dispositivo autorizado: ${
+        device.name || "Sem nome"
+      }`,
       "success"
     );
 
-    showToast(
-      `${normalized.name} adicionado ao scanner.`
+    toast(
+      "Dispositivo adicionado.",
+      "success"
     );
-
-
-    await selectDevice(normalized.id);
 
 
   } catch (error) {
 
-    if (
-      error.name === "NotFoundError"
-    ) {
-
-      log(
-        "Seleção cancelada ou nenhum dispositivo escolhido.",
-        "info"
-      );
-
-    } else if (
-      error.name === "SecurityError"
-    ) {
-
-      log(
-        "Acesso Bluetooth bloqueado pelo navegador.",
-        "error"
-      );
-
-      showToast(
-        "Permissão Bluetooth bloqueada."
-      );
-
-    } else {
-
-      log(
-        `Erro no BLE: ${error.message || error}`,
-        "error"
-      );
-
-      showToast(
-        error.message || "Erro ao acessar Bluetooth."
-      );
-
-    }
+    handleBluetoothError(
+      error,
+      "Falha ao selecionar dispositivo"
+    );
 
   } finally {
 
     state.scanning = false;
 
-    scanBtn.disabled = false;
+    $("btnScan").disabled = false;
 
-    scanBtn.innerHTML =
+    $("btnScan").textContent =
       "⚡ Escanear BLE";
 
   }
@@ -2327,24 +2230,127 @@ async function scanBLE() {
 }
 
 
-/* =========================================================
-   DISPOSITIVOS JÁ AUTORIZADOS
-========================================================= */
+/* ==========================================================
+   REGISTRAR DISPOSITIVO
+========================================================== */
 
-async function loadKnownDevices() {
+function registerDevice(device) {
+
+  const existing =
+    state.devices.get(device.id);
+
+
+  if (!existing) {
+
+    state.devices.set(
+
+      device.id,
+
+      {
+
+        id: device.id,
+
+        name:
+          device.name ||
+          "Dispositivo BLE sem nome",
+
+        raw:
+          device,
+
+        connected: false,
+
+        services: [],
+
+        hasHeartRate: false,
+
+        hasBattery: false,
+
+        lastSeen:
+          Date.now(),
+
+        angle:
+          Math.random() * 360,
+
+        radius:
+          .25 + Math.random() * .6
+
+      }
+
+    );
+
+  } else {
+
+    existing.raw =
+      device;
+
+    existing.name =
+      device.name ||
+      existing.name;
+
+    existing.lastSeen =
+      Date.now();
+
+  }
+
+
+  device.addEventListener(
+    "gattserverdisconnected",
+    () => {
+
+      const data =
+        state.devices.get(device.id);
+
+      if (data) {
+
+        data.connected = false;
+
+      }
+
+      if (
+        state.selectedId === device.id
+      ) {
+
+        updateConnectionUI(false);
+
+      }
+
+      log(
+        `GATT desconectado: ${
+          device.name || device.id
+        }`,
+        "warning"
+      );
+
+      renderAll();
+
+    },
+    {
+      once: false
+    }
+  );
+
+
+  renderAll();
+}
+
+
+/* ==========================================================
+   DISPOSITIVOS AUTORIZADOS
+========================================================== */
+
+async function getGrantedDevices() {
 
   if (
     !navigator.bluetooth ||
-    typeof navigator.bluetooth.getDevices !==
-      "function"
+    typeof navigator.bluetooth.getDevices !== "function"
   ) {
 
-    showToast(
-      "Este navegador não disponibiliza getDevices()."
+    toast(
+      "Este navegador não oferece getDevices().",
+      "warning"
     );
 
     return;
-
   }
 
 
@@ -2354,45 +2360,40 @@ async function loadKnownDevices() {
       await navigator.bluetooth.getDevices();
 
 
-    if (!devices.length) {
-
-      showToast(
-        "Nenhum dispositivo previamente autorizado."
-      );
-
-      log(
-        "Nenhum dispositivo BLE previamente autorizado.",
-        "info"
-      );
-
-      return;
-
-    }
+    devices.forEach(
+      registerDevice
+    );
 
 
-    for (const raw of devices) {
-
-      addDevice(raw);
-
-    }
-
+    renderAll();
 
     log(
-      `${devices.length} dispositivo(s) autorizado(s) carregado(s).`,
+      `${devices.length} dispositivo(s) autorizado(s) recuperado(s).`,
       "success"
     );
 
 
-    showToast(
-      `${devices.length} dispositivo(s) carregado(s).`
-    );
+    if (devices.length === 0) {
 
+      toast(
+        "Nenhum dispositivo autorizado anteriormente.",
+        "info"
+      );
+
+    } else {
+
+      toast(
+        `${devices.length} dispositivo(s) recuperado(s).`,
+        "success"
+      );
+
+    }
 
   } catch (error) {
 
-    log(
-      `Não foi possível carregar dispositivos autorizados: ${error.message}`,
-      "error"
+    handleBluetoothError(
+      error,
+      "Não foi possível recuperar dispositivos autorizados"
     );
 
   }
@@ -2400,113 +2401,93 @@ async function loadKnownDevices() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    CONECTAR
-========================================================= */
+========================================================== */
 
 async function connectDevice(id) {
 
+  const data =
+    state.devices.get(id);
+
+  if (!data) {
+    return;
+  }
+
   const device =
-    state.devices.find(
-      d => d.id === id
-    );
-
-  if (!device) return;
-
-  const raw =
-    device.rawDevice;
+    data.raw;
 
 
-  if (!raw) {
+  if (!device.gatt) {
 
-    showToast(
-      "Objeto Bluetooth não disponível."
+    toast(
+      "Este dispositivo não disponibilizou GATT.",
+      "error"
     );
 
     return;
-
   }
 
 
   try {
 
-    if (
-      raw.gatt &&
-      raw.gatt.connected
-    ) {
-
-      device.connected = true;
-
-      state.connectedId =
-        device.id;
-
-      renderAll();
-
-      await discoverServices(device);
-
-      return;
-
-    }
-
+    selectDevice(id);
 
     log(
-      `Conectando ao GATT: ${device.name}`,
+      `Conectando GATT: ${
+        device.name || device.id
+      }`,
       "info"
     );
 
 
-    const server =
-      await raw.gatt.connect();
+    if (
+      !device.gatt.connected
+    ) {
 
-
-    if (!server.connected) {
-
-      throw new Error(
-        "O GATT não confirmou a conexão."
-      );
+      await device.gatt.connect();
 
     }
 
 
-    device.connected = true;
+    state.connected =
+      device;
 
-    state.connectedId =
-      device.id;
+
+    data.connected =
+      true;
+
+
+    updateConnectionUI(true);
+
+
+    beep(1100);
 
 
     log(
-      `GATT conectado: ${device.name}`,
+      `GATT conectado: ${
+        device.name || device.id
+      }`,
       "success"
     );
 
 
-    showToast(
-      `Conectado a ${device.name}`
+    toast(
+      "GATT conectado.",
+      "success"
     );
 
 
-    renderAll();
-
-
-    await discoverServices(device);
+    await discoverGatt(device);
 
 
   } catch (error) {
 
-    device.connected = false;
+    updateConnectionUI(false);
 
-    state.connectedId = null;
-
-    renderAll();
-
-
-    log(
-      `Falha GATT: ${error.message || error}`,
-      "error"
-    );
-
-    showToast(
-      `Falha: ${error.message || "conexão recusada"}`
+    handleBluetoothError(
+      error,
+      "Falha ao conectar GATT"
     );
 
   }
@@ -2514,254 +2495,254 @@ async function connectDevice(id) {
 }
 
 
-/* =========================================================
+/* ==========================================================
    DESCONECTAR
-========================================================= */
+========================================================== */
 
 function disconnectDevice(id) {
 
-  const device =
-    state.devices.find(
-      d => d.id === id
-    );
+  const data =
+    state.devices.get(id);
 
-  if (!device) return;
+  if (!data) {
+    return;
+  }
+
+  const device =
+    data.raw;
 
 
   try {
 
     if (
-      device.rawDevice?.gatt?.connected
+      device.gatt &&
+      device.gatt.connected
     ) {
 
-      device.rawDevice.gatt.disconnect();
+      device.gatt.disconnect();
 
     }
 
-  } catch (error) {
+  } catch (_) {}
 
-    console.warn(error);
+
+  data.connected =
+    false;
+
+
+  if (
+    state.connected &&
+    state.connected.id === id
+  ) {
+
+    state.connected =
+      null;
 
   }
 
 
-  device.connected = false;
+  state.heartCharacteristic =
+    null;
 
-  if (state.connectedId === id) {
+  state.batteryCharacteristic =
+    null;
 
-    state.connectedId = null;
+
+  $("bpm").textContent =
+    "--";
+
+  $("heartStatus").textContent =
+    "Heart Rate não conectado";
+
+
+  $("batteryText").textContent =
+    "--";
+
+  $("batteryFill").style.width =
+    "0%";
+
+  $("batteryStatus").textContent =
+    "Nenhuma bateria disponível.";
+
+
+  updateConnectionUI(false);
+
+  renderAll();
+
+
+  log(
+    `Desconectado: ${
+      device.name || device.id
+    }`,
+    "info"
+  );
+
+}
+
+
+/* ==========================================================
+   DESCOBRIR GATT
+========================================================== */
+
+async function discoverGatt(device) {
+
+  const data =
+    state.devices.get(device.id);
+
+  if (!data) {
+    return;
+  }
+
+
+  const server =
+    device.gatt;
+
+
+  if (!server.connected) {
+
+    throw new Error(
+      "GATT não está conectado."
+    );
 
   }
 
 
   log(
-    `Desconectado: ${device.name}`,
+    "Descobrindo serviços GATT...",
     "info"
   );
 
 
-  renderAll();
+  const services =
+    await server.getPrimaryServices();
+
+
+  state.services =
+    services;
+
+
+  data.services =
+    services.map(
+      service => service.uuid
+    );
+
+
+  data.hasHeartRate =
+    services.some(
+      service =>
+        normalizeUUID(service.uuid) ===
+        normalizeUUID(UUID.HEART_RATE)
+    );
+
+
+  data.hasBattery =
+    services.some(
+      service =>
+        normalizeUUID(service.uuid) ===
+        normalizeUUID(UUID.BATTERY)
+    );
+
+
+  log(
+    `${services.length} serviço(s) GATT encontrado(s).`,
+    "success"
+  );
+
+
+  renderGatt(services);
+
+  await loadBattery(device);
+
+  await setupHeartRate(device);
+
+  await loadDeviceInformation(device);
 
 }
 
 
-/* =========================================================
-   DESCOBRIR SERVIÇOS
-========================================================= */
-
-async function discoverServices(device) {
-
-  const raw =
-    device.rawDevice;
-
-  if (
-    !raw?.gatt?.connected
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    log(
-      `Descobrindo serviços GATT de ${device.name}...`,
-      "info"
-    );
-
-
-    const services =
-      await raw.gatt.getPrimaryServices();
-
-
-    device.services = [];
-
-
-    for (const service of services) {
-
-      const serviceData = {
-
-        uuid: service.uuid,
-
-        name: uuidName(service.uuid),
-
-        characteristics: []
-
-      };
-
-
-      let characteristics = [];
-
-
-      try {
-
-        characteristics =
-          await service.getCharacteristics();
-
-      } catch (error) {
-
-        log(
-          `Não foi possível listar características de ${service.uuid}`,
-          "warning"
-        );
-
-      }
-
-
-      for (
-        const characteristic
-        of characteristics
-      ) {
-
-        const properties =
-          characteristic.properties || {};
-
-
-        const characteristicData = {
-
-          uuid: characteristic.uuid,
-
-          properties,
-
-          serviceUuid: service.uuid,
-
-          value: null
-
-        };
-
-
-        state.characteristics.set(
-          characteristic.uuid,
-          characteristic
-        );
-
-
-        serviceData.characteristics.push(
-          characteristicData
-        );
-
-      }
-
-
-      device.services.push(
-        serviceData
-      );
-
-    }
-
-
-    device.discovered = true;
-
-
-    log(
-      `${services.length} serviço(s) encontrado(s).`,
-      "success"
-    );
-
-
-    renderDetails(device);
-
-
-    await readBattery(device);
-
-
-  } catch (error) {
-
-    log(
-      `Erro na descoberta GATT: ${error.message}`,
-      "error"
-    );
-
-    renderDetails(device);
-
-  }
-
-}
-
-
-/* =========================================================
-   BATERIA
-========================================================= */
-
-async function readBattery(device) {
-
-  const serviceData =
-    device.services.find(
-      s =>
-        s.uuid.toLowerCase() ===
-        "0000180f-0000-1000-8000-00805f9b34fb"
-    );
-
-
-  if (!serviceData) return;
-
+/* ==========================================================
+   BATTERY
+========================================================== */
+
+async function loadBattery(device) {
 
   try {
 
     const service =
-      await device.rawDevice.gatt.getPrimaryService(
-        "battery_service"
+      await device.gatt.getPrimaryService(
+        UUID.BATTERY
       );
 
 
     const characteristic =
       await service.getCharacteristic(
-        "battery_level"
+        UUID.BATTERY_LEVEL
       );
 
 
-    if (
-      !characteristic.properties.read
-    ) {
-
-      return;
-
-    }
+    state.batteryCharacteristic =
+      characteristic;
 
 
     const value =
       await characteristic.readValue();
 
 
-    if (value.byteLength > 0) {
+    updateBattery(
+      value.getUint8(0)
+    );
 
-      device.battery =
-        value.getUint8(0);
 
-      log(
-        `Bateria: ${device.battery}%`,
-        "success"
+    log(
+      `Bateria: ${value.getUint8(0)}%`,
+      "success"
+    );
+
+
+    if (
+      characteristic.properties.notify
+    ) {
+
+      await characteristic.startNotifications();
+
+
+      state.batteryHandler =
+        event => {
+
+          const value =
+            event.target.value;
+
+          updateBattery(
+            value.getUint8(0)
+          );
+
+        };
+
+
+      characteristic.addEventListener(
+        "characteristicvaluechanged",
+        state.batteryHandler
       );
-
-      renderDetails(device);
 
     }
 
+
   } catch (error) {
 
+    state.batteryCharacteristic =
+      null;
+
+    $("batteryText").textContent =
+      "--";
+
+    $("batteryFill").style.width =
+      "0%";
+
+    $("batteryStatus").textContent =
+      "Battery Service não disponível.";
+
     log(
-      `Bateria não pôde ser lida: ${error.message}`,
+      "Battery Service não disponível neste dispositivo.",
       "warning"
     );
 
@@ -2770,31 +2751,531 @@ async function readBattery(device) {
 }
 
 
-/* =========================================================
-   LEITURA DE CHARACTERISTIC
-========================================================= */
+/* ==========================================================
+   HEART RATE
+========================================================== */
+
+async function setupHeartRate(device) {
+
+  try {
+
+    /*
+      CORRETO:
+
+      Serviço:
+      180D / heart_rate
+
+      Característica:
+      2A37 / heart_rate_measurement
+    */
+
+    const service =
+      await device.gatt.getPrimaryService(
+        UUID.HEART_RATE
+      );
+
+
+    const characteristic =
+      await service.getCharacteristic(
+        UUID.HEART_RATE_MEASUREMENT
+      );
+
+
+    state.heartCharacteristic =
+      characteristic;
+
+
+    $("heartStatus").textContent =
+      "Heart Rate disponível";
+
+
+    if (
+      !characteristic.properties.notify
+    ) {
+
+      $("heartStatus").textContent =
+        "Característica encontrada, mas sem Notify.";
+
+      log(
+        "Heart Rate Measurement encontrada sem propriedade Notify.",
+        "warning"
+      );
+
+      return;
+    }
+
+
+    await characteristic.startNotifications();
+
+
+    if (state.heartHandler) {
+
+      try {
+
+        characteristic.removeEventListener(
+          "characteristicvaluechanged",
+          state.heartHandler
+        );
+
+      } catch (_) {}
+
+    }
+
+
+    state.heartHandler =
+      event => {
+
+        const value =
+          parseHeartRate(
+            event.target.value
+          );
+
+
+        if (
+          Number.isFinite(
+            value.bpm
+          )
+        ) {
+
+          $("bpm").textContent =
+            value.bpm;
+
+          $("heartStatus").textContent =
+            "Recebendo notificações em tempo real";
+
+
+          log(
+            `Heart Rate: ${value.bpm} BPM`,
+            "success"
+          );
+
+        }
+
+      };
+
+
+    characteristic.addEventListener(
+      "characteristicvaluechanged",
+      state.heartHandler
+    );
+
+
+    log(
+      "Heart Rate Measurement: notificações ativadas.",
+      "success"
+    );
+
+
+    toast(
+      "Heart Rate conectado.",
+      "success"
+    );
+
+
+  } catch (error) {
+
+    state.heartCharacteristic =
+      null;
+
+    $("bpm").textContent =
+      "--";
+
+    $("heartStatus").textContent =
+      "Heart Rate não disponível neste dispositivo.";
+
+
+    log(
+      "Heart Rate não disponível neste dispositivo.",
+      "warning"
+    );
+
+  }
+
+}
+
+
+/* ==========================================================
+   PARSER HEART RATE
+========================================================== */
+
+function parseHeartRate(dataView) {
+
+  if (!dataView || dataView.byteLength < 2) {
+
+    return {
+      bpm: null
+    };
+
+  }
+
+
+  const flags =
+    dataView.getUint8(0);
+
+
+  const is16Bit =
+    Boolean(flags & 0x01);
+
+
+  let offset =
+    1;
+
+
+  let bpm;
+
+
+  if (is16Bit) {
+
+    if (dataView.byteLength < 3) {
+
+      return {
+        bpm: null
+      };
+
+    }
+
+    bpm =
+      dataView.getUint16(
+        offset,
+        true
+      );
+
+    offset += 2;
+
+  } else {
+
+    bpm =
+      dataView.getUint8(
+        offset
+      );
+
+    offset += 1;
+
+  }
+
+
+  const energyPresent =
+    Boolean(flags & 0x08);
+
+
+  let energyExpended = null;
+
+
+  if (
+    energyPresent &&
+    dataView.byteLength >= offset + 2
+  ) {
+
+    energyExpended =
+      dataView.getUint16(
+        offset,
+        true
+      );
+
+  }
+
+
+  return {
+
+    bpm,
+
+    energyExpended
+
+  };
+
+}
+
+
+/* ==========================================================
+   DEVICE INFORMATION
+========================================================== */
+
+async function loadDeviceInformation(device) {
+
+  const fields = [
+
+    [
+      "MANUFACTURER",
+      UUID.MANUFACTURER_NAME
+    ],
+
+    [
+      "MODEL",
+      UUID.MODEL_NUMBER
+    ],
+
+    [
+      "SERIAL",
+      UUID.SERIAL_NUMBER
+    ],
+
+    [
+      "HARDWARE",
+      UUID.HARDWARE_REVISION
+    ],
+
+    [
+      "FIRMWARE",
+      UUID.FIRMWARE_REVISION
+    ],
+
+    [
+      "SOFTWARE",
+      UUID.SOFTWARE_REVISION
+    ]
+
+  ];
+
+
+  for (const [label, uuid] of fields) {
+
+    try {
+
+      const service =
+        await device.gatt.getPrimaryService(
+          UUID.DEVICE_INFORMATION
+        );
+
+
+      const characteristic =
+        await service.getCharacteristic(
+          uuid
+        );
+
+
+      const value =
+        await characteristic.readValue();
+
+
+      const text =
+        decodeDataView(value);
+
+
+      const data =
+        state.devices.get(device.id);
+
+
+      if (data) {
+
+        data[label.toLowerCase()] =
+          text;
+
+      }
+
+
+    } catch (_) {
+
+      // Característica opcional.
+
+    }
+
+  }
+
+
+  renderDetails();
+
+}
+
+
+/* ==========================================================
+   DECODIFICAR TEXTO
+========================================================== */
+
+function decodeDataView(dataView) {
+
+  const bytes =
+    new Uint8Array(
+      dataView.buffer,
+      dataView.byteOffset,
+      dataView.byteLength
+    );
+
+
+  try {
+
+    return new TextDecoder(
+      "utf-8"
+    ).decode(bytes).replace(
+      /\0/g,
+      ""
+    ).trim();
+
+  } catch (_) {
+
+    return Array.from(bytes)
+      .map(
+        byte =>
+          byte.toString(16).padStart(2, "0")
+      )
+      .join(" ");
+
+  }
+
+}
+
+
+/* ==========================================================
+   HEX
+========================================================== */
+
+function dataViewToHex(dataView) {
+
+  const bytes =
+    new Uint8Array(
+      dataView.buffer,
+      dataView.byteOffset,
+      dataView.byteLength
+    );
+
+
+  return Array.from(bytes)
+    .map(
+      byte =>
+        byte
+          .toString(16)
+          .padStart(2, "0")
+          .toUpperCase()
+    )
+    .join(" ");
+
+}
+
+
+/* ==========================================================
+   UUID
+========================================================== */
+
+function normalizeUUID(uuid) {
+
+  return String(uuid)
+    .toLowerCase();
+
+}
+
+
+function shortUUID(uuid) {
+
+  const value =
+    normalizeUUID(uuid);
+
+
+  const match =
+    value.match(
+      /^0000([0-9a-f]{4})-0000-1000-8000-00805f9b34fb$/
+    );
+
+
+  if (match) {
+
+    return "0x" +
+      match[1].toUpperCase();
+
+  }
+
+
+  return value;
+
+}
+
+
+function knownServiceName(uuid) {
+
+  const short =
+    shortUUID(uuid)
+      .replace("0x", "")
+      .toLowerCase();
+
+
+  return (
+    SERVICE_NAMES[short] ||
+    "Serviço BLE"
+  );
+
+}
+
+
+function knownCharacteristicName(uuid) {
+
+  const short =
+    shortUUID(uuid)
+      .replace("0x", "")
+      .toLowerCase();
+
+
+  return (
+    CHARACTERISTIC_NAMES[short] ||
+    "Característica BLE"
+  );
+
+}
+
+
+/* ==========================================================
+   PROPRIEDADES
+========================================================== */
+
+function propertyList(properties) {
+
+  const names = [
+
+    "broadcast",
+
+    "read",
+
+    "writeWithoutResponse",
+
+    "write",
+
+    "notify",
+
+    "indicate",
+
+    "authenticatedSignedWrites",
+
+    "reliableWrite",
+
+    "writableAuxiliaries"
+
+  ];
+
+
+  return names
+    .filter(
+      name =>
+        properties &&
+        properties[name]
+    )
+    .map(
+      name =>
+        `<span class="prop">${escapeHtml(name)}</span>`
+    )
+    .join("");
+
+}
+
+
+/* ==========================================================
+   READ CHARACTERISTIC
+========================================================== */
 
 async function readCharacteristic(
-  deviceId,
-  uuid
+  serviceUuid,
+  characteristicUuid
 ) {
 
   const device =
-    state.devices.find(
-      d => d.id === deviceId
-    );
-
-  if (!device) return;
+    state.connected;
 
 
-  const characteristic =
-    state.characteristics.get(uuid);
+  if (
+    !device ||
+    !device.gatt ||
+    !device.gatt.connected
+  ) {
 
-
-  if (!characteristic) {
-
-    showToast(
-      "Característica não encontrada."
+    toast(
+      "Conecte um dispositivo primeiro.",
+      "warning"
     );
 
     return;
@@ -2804,15 +3285,25 @@ async function readCharacteristic(
 
   try {
 
+    const service =
+      await device.gatt.getPrimaryService(
+        serviceUuid
+      );
+
+
+    const characteristic =
+      await service.getCharacteristic(
+        characteristicUuid
+      );
+
+
     if (
       !characteristic.properties.read
     ) {
 
-      showToast(
-        "Esta característica não possui leitura."
+      throw new Error(
+        "Esta característica não permite leitura."
       );
-
-      return;
 
     }
 
@@ -2821,45 +3312,31 @@ async function readCharacteristic(
       await characteristic.readValue();
 
 
+    const hex =
+      dataViewToHex(value);
+
+
     const text =
-      formatDataView(value);
+      decodeDataView(value);
 
 
-    const service =
-      device.services.find(
-        s =>
-          s.uuid.toLowerCase() ===
-          characteristic.serviceUuid.toLowerCase()
-      );
-
-
-    const charData =
-      service?.characteristics.find(
-        c =>
-          c.uuid === characteristic.uuid
-      );
-
-
-    if (charData) {
-
-      charData.value = text;
-
-    }
+    updateCharacteristicValue(
+      characteristicUuid,
+      `${hex}\n${text}`
+    );
 
 
     log(
-      `Leitura ${characteristic.uuid}: ${text}`,
+      `Leitura ${shortUUID(characteristicUuid)}: ${hex}`,
       "success"
     );
 
 
-    renderDetails(device);
-
   } catch (error) {
 
-    log(
-      `Erro ao ler característica: ${error.message}`,
-      "error"
+    handleBluetoothError(
+      error,
+      "Falha ao ler característica"
     );
 
   }
@@ -2867,1278 +3344,1714 @@ async function readCharacteristic(
 }
 
 
-/* =========================================================
-   NOTIFICAÇÕES
-========================================================= */
+/* ==========================================================
+   NOTIFICAÇÃO GENÉRICA
+========================================================== */
 
-async function toggleNotification(
-  deviceId,
-  uuid
+async function toggleNotifications(
+  serviceUuid,
+  characteristicUuid,
+  button
 ) {
 
   const device =
-    state.devices.find(
-      d => d.id === deviceId
-    );
-
-  if (!device) return;
+    state.connected;
 
 
-  const characteristic =
-    state.characteristics.get(uuid);
-
-  if (!characteristic) return;
-
-
-  const active =
-    state.notifications.has(uuid);
-
-
-  try {
-
-    if (active) {
-
-      await characteristic.stopNotifications();
-
-      characteristic.removeEventListener(
-        "characteristicvaluechanged",
-        handleCharacteristicNotification
-      );
-
-      state.notifications.delete(uuid);
-
-      log(
-        `Notificação desativada: ${uuid}`,
-        "info"
-      );
-
-    } else {
-
-      await characteristic.startNotifications();
-
-      characteristic.addEventListener(
-        "characteristicvaluechanged",
-        handleCharacteristicNotification
-      );
-
-      state.notifications.set(
-        uuid,
-        true
-      );
-
-      log(
-        `Notificação ativada: ${uuid}`,
-        "success"
-      );
-
-    }
-
-
-    renderDetails(device);
-
-  } catch (error) {
-
-    log(
-      `Erro em notificação: ${error.message}`,
-      "error"
-    );
-
-  }
-
-}
-
-
-function handleCharacteristicNotification(event) {
-
-  const characteristic =
-    event.target;
-
-
-  const value =
-    event.target.value;
-
-
-  const text =
-    formatDataView(value);
-
-
-  const device =
-    state.devices.find(
-      d =>
-        d.services.some(
-          s =>
-            s.characteristics.some(
-              c =>
-                c.uuid ===
-                characteristic.uuid
-            )
-        )
-    );
-
-
-  if (!device) return;
-
-
-  const service =
-    device.services.find(
-      s =>
-        s.characteristics.some(
-          c =>
-            c.uuid ===
-            characteristic.uuid
-        )
-    );
-
-
-  const charData =
-    service?.characteristics.find(
-      c =>
-        c.uuid ===
-        characteristic.uuid
-    );
-
-
-  if (charData) {
-
-    charData.value = text;
-
-  }
-
-
-  log(
-    `Notify ${characteristic.uuid}: ${text}`,
-    "success"
-  );
-
-
-  renderDetails(device);
-
-}
-
-
-/* =========================================================
-   FORMATAÇÃO DOS DADOS
-========================================================= */
-
-function formatDataView(view) {
-
-  if (!view) return "";
-
-  const bytes = [];
-
-  for (
-    let i = 0;
-    i < view.byteLength;
-    i++
+  if (
+    !device ||
+    !device.gatt ||
+    !device.gatt.connected
   ) {
 
-    bytes.push(
-      view.getUint8(i)
-        .toString(16)
-        .padStart(2, "0")
+    toast(
+      "Conecte um dispositivo primeiro.",
+      "warning"
     );
-
-  }
-
-
-  const hex =
-    bytes.join(" ");
-
-
-  let text = "";
-
-  try {
-
-    text =
-      new TextDecoder("utf-8", {
-        fatal: false
-      }).decode(view);
-
-  } catch {
-
-    text = "";
-
-  }
-
-
-  const cleanText =
-    text
-      .replace(/[^\x20-\x7EÀ-ÿ]/g, "")
-      .trim();
-
-
-  if (cleanText) {
-
-    return `${hex} | "${cleanText}"`;
-
-  }
-
-
-  return hex;
-
-}
-
-
-/* =========================================================
-   RENDER DEVICE LIST
-========================================================= */
-
-function getFilteredDevices() {
-
-  const query =
-    searchInput.value
-      .trim()
-      .toLowerCase();
-
-
-  return state.devices.filter(
-    device => {
-
-      if (!query) return true;
-
-      return (
-
-        device.name
-          .toLowerCase()
-          .includes(query)
-
-        ||
-
-        device.id
-          .toLowerCase()
-          .includes(query)
-
-      );
-
-    }
-  );
-
-}
-
-
-function renderDeviceList() {
-
-  const devices =
-    getFilteredDevices();
-
-
-  if (!devices.length) {
-
-    deviceList.innerHTML = `
-      <div class="empty">
-        Nenhum dispositivo BLE autorizado.<br><br>
-        Toque em <strong>Escanear BLE</strong>.
-      </div>
-    `;
 
     return;
 
   }
 
 
-  deviceList.innerHTML =
-    devices.map(device => {
+  try {
 
-      const selected =
-        device.id ===
-        state.selectedId;
-
-      const rssi =
-        typeof device.rssi === "number"
-          ? `${device.rssi} dBm`
-          : "RSSI indisponível";
+    const service =
+      await device.gatt.getPrimaryService(
+        serviceUuid
+      );
 
 
-      const connection =
-        device.connected
-          ? "● Conectado"
-          : "○ Desconectado";
+    const characteristic =
+      await service.getCharacteristic(
+        characteristicUuid
+      );
 
 
-      return `
+    if (
+      !characteristic.properties.notify &&
+      !characteristic.properties.indicate
+    ) {
 
-        <div
-          class="device"
-          data-device-id="${escapeHTML(device.id)}"
-        >
+      throw new Error(
+        "Esta característica não possui Notify/Indicate."
+      );
 
-          <div class="device-icon">
-            ${deviceIcon(device)}
-          </div>
+    }
 
-          <div
-            class="device-info"
-            onclick="window.selectDevice('${escapeHTML(device.id)}')"
-          >
 
-            <div class="device-name">
-              ${escapeHTML(device.name)}
-            </div>
+    if (
+      button.dataset.active === "1"
+    ) {
 
-            <div class="device-meta">
-              ${escapeHTML(connection)}
-              • ${escapeHTML(rssi)}
-              • ID ${escapeHTML(device.id)}
-            </div>
+      await characteristic.stopNotifications();
 
-          </div>
+      button.dataset.active =
+        "0";
 
-          <div class="device-actions">
+      button.textContent =
+        "Ativar Notify";
 
-            <button
-              class="icon-button"
-              title="Selecionar"
-              onclick="window.selectDevice('${escapeHTML(device.id)}')"
-            >
-              ${selected ? "✓" : "›"}
-            </button>
 
-            <button
-              class="icon-button"
-              title="Conectar"
-              onclick="window.connectDevice('${escapeHTML(device.id)}')"
-            >
-              🔗
-            </button>
+      log(
+        `Notificações desativadas: ${shortUUID(characteristicUuid)}`,
+        "info"
+      );
 
-          </div>
 
-        </div>
+      return;
 
-      `;
+    }
 
-    }).join("");
+
+    const handler =
+      event => {
+
+        const value =
+          event.target.value;
+
+        const hex =
+          dataViewToHex(value);
+
+
+        updateCharacteristicValue(
+          characteristicUuid,
+          hex
+        );
+
+
+        log(
+          `Notify ${shortUUID(characteristicUuid)}: ${hex}`,
+          "success"
+        );
+
+      };
+
+
+    characteristic.addEventListener(
+      "characteristicvaluechanged",
+      handler
+    );
+
+
+    await characteristic.startNotifications();
+
+
+    button.dataset.active =
+      "1";
+
+    button.textContent =
+      "Parar Notify";
+
+
+    log(
+      `Notificações ativadas: ${shortUUID(characteristicUuid)}`,
+      "success"
+    );
+
+
+  } catch (error) {
+
+    handleBluetoothError(
+      error,
+      "Falha ao ativar notificações"
+    );
+
+  }
 
 }
 
 
-/* =========================================================
-   RENDER RADAR
-========================================================= */
+/* ==========================================================
+   ATUALIZAR VALOR DA CHARACTERISTIC
+========================================================== */
 
-function renderRadar() {
+function updateCharacteristicValue(
+  characteristicUuid,
+  value
+) {
+
+  const nodes =
+    document.querySelectorAll(
+      `[data-char-value="${CSS.escape(
+        normalizeUUID(characteristicUuid)
+      )}"]`
+    );
+
+
+  nodes.forEach(
+    node => {
+
+      node.textContent =
+        value;
+
+    }
+  );
+
+}
+
+
+/* ==========================================================
+   WRITE HEX
+========================================================== */
+
+async function writeHex(
+  serviceUuid,
+  characteristicUuid
+) {
+
+  const device =
+    state.connected;
+
+
+  if (
+    !device ||
+    !device.gatt ||
+    !device.gatt.connected
+  ) {
+
+    toast(
+      "Conecte um dispositivo primeiro.",
+      "warning"
+    );
+
+    return;
+
+  }
+
+
+  const input =
+    document.querySelector(
+      `[data-write-input="${CSS.escape(
+        normalizeUUID(characteristicUuid)
+      )}"]`
+    );
+
+
+  if (!input) {
+    return;
+  }
+
+
+  try {
+
+    const bytes =
+      parseHex(input.value);
+
+
+    const service =
+      await device.gatt.getPrimaryService(
+        serviceUuid
+      );
+
+
+    const characteristic =
+      await service.getCharacteristic(
+        characteristicUuid
+      );
+
+
+    if (
+      characteristic.properties.write
+    ) {
+
+      await characteristic.writeValue(
+        bytes
+      );
+
+    } else if (
+      characteristic.properties.writeWithoutResponse
+    ) {
+
+      await characteristic.writeValueWithoutResponse(
+        bytes
+      );
+
+    } else {
+
+      throw new Error(
+        "Esta característica não permite escrita."
+      );
+
+    }
+
+
+    log(
+      `Escrito ${shortUUID(characteristicUuid)}: ${dataViewToHex(new DataView(bytes.buffer))}`,
+      "success"
+    );
+
+
+    toast(
+      "Dados enviados.",
+      "success"
+    );
+
+
+  } catch (error) {
+
+    handleBluetoothError(
+      error,
+      "Falha ao escrever"
+    );
+
+  }
+
+}
+
+
+function parseHex(text) {
+
+  const cleaned =
+    text
+      .replace(/0x/gi, "")
+      .replace(/[^0-9a-f]/gi, "");
+
+
+  if (
+    cleaned.length === 0 ||
+    cleaned.length % 2 !== 0
+  ) {
+
+    throw new Error(
+      "Hexadecimal inválido. Use, por exemplo: 01 02 FF"
+    );
+
+  }
+
+
+  const bytes =
+    new Uint8Array(
+      cleaned.length / 2
+    );
+
+
+  for (
+    let i = 0;
+    i < cleaned.length;
+    i += 2
+  ) {
+
+    bytes[i / 2] =
+      parseInt(
+        cleaned.substring(i, i + 2),
+        16
+      );
+
+  }
+
+
+  return bytes;
+
+}
+
+
+/* ==========================================================
+   RENDER GATT
+========================================================== */
+
+function renderGatt(services) {
 
   const container =
-    $("radarContainer");
+    $("gatt");
+
+
+  if (
+    !services ||
+    services.length === 0
+  ) {
+
+    container.innerHTML =
+      `<div class="empty">
+        Nenhum serviço GATT encontrado.
+      </div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML = "";
+
+
+  services.forEach(
+    (service, index) => {
+
+      const serviceBox =
+        document.createElement("div");
+
+      serviceBox.className =
+        "service";
+
+
+      serviceBox.innerHTML = `
+
+        <div class="service-head">
+
+          <div>
+
+            <div class="service-name">
+              ${escapeHtml(
+                knownServiceName(service.uuid)
+              )}
+            </div>
+
+            <div class="uuid">
+              ${escapeHtml(
+                service.uuid
+              )}
+            </div>
+
+          </div>
+
+          <div class="badge cyan">
+            Serviço
+          </div>
+
+        </div>
+
+        <div class="chars">
+          <div class="empty">
+            Descobrindo características...
+          </div>
+        </div>
+
+      `;
+
+
+      const head =
+        serviceBox.querySelector(
+          ".service-head"
+        );
+
+
+      head.addEventListener(
+        "click",
+        async () => {
+
+          const open =
+            serviceBox.classList.toggle(
+              "open"
+            );
+
+
+          if (
+            open &&
+            !serviceBox.dataset.loaded
+          ) {
+
+            await loadCharacteristics(
+              service,
+              serviceBox.querySelector(
+                ".chars"
+              )
+            );
+
+          }
+
+        }
+      );
+
+
+      container.appendChild(
+        serviceBox
+      );
+
+    }
+  );
+
+}
+
+
+/* ==========================================================
+   CARACTERÍSTICAS
+========================================================== */
+
+async function loadCharacteristics(
+  service,
+  container
+) {
+
+  try {
+
+    const characteristics =
+      await service.getCharacteristics();
+
+
+    container.innerHTML = "";
+
+
+    if (
+      characteristics.length === 0
+    ) {
+
+      container.innerHTML =
+        `<div class="empty">
+          Nenhuma característica.
+        </div>`;
+
+      return;
+
+    }
+
+
+    characteristics.forEach(
+      characteristic => {
+
+        const properties =
+          characteristic.properties;
+
+
+        const char =
+          document.createElement(
+            "div"
+          );
+
+
+        char.className =
+          "characteristic";
+
+
+        const uuid =
+          normalizeUUID(
+            characteristic.uuid
+          );
+
+
+        const canRead =
+          properties.read;
+
+        const canWrite =
+          properties.write ||
+          properties.writeWithoutResponse;
+
+        const canNotify =
+          properties.notify ||
+          properties.indicate;
+
+
+        char.innerHTML = `
+
+          <div class="char-top">
+
+            <div>
+
+              <div class="char-name">
+                ${escapeHtml(
+                  knownCharacteristicName(
+                    characteristic.uuid
+                  )
+                )}
+              </div>
+
+              <div class="uuid">
+                ${escapeHtml(
+                  characteristic.uuid
+                )}
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="properties">
+
+            ${propertyList(properties)}
+
+          </div>
+
+
+          <div
+            class="char-value"
+            data-char-value="${escapeHtml(uuid)}"
+          >
+            Sem leitura.
+          </div>
+
+
+          <div class="char-buttons">
+
+            ${
+              canRead
+              ? `
+                <button
+                  class="btn btn-small"
+                  data-action="read"
+                >
+                  Ler
+                </button>
+              `
+              : ""
+            }
+
+
+            ${
+              canNotify
+              ? `
+                <button
+                  class="btn btn-small"
+                  data-action="notify"
+                  data-active="0"
+                >
+                  Ativar Notify
+                </button>
+              `
+              : ""
+            }
+
+          </div>
+
+
+          ${
+            canWrite
+            ? `
+
+              <div style="margin-top:8px">
+
+                <input
+                  data-write-input="${escapeHtml(uuid)}"
+                  placeholder="HEX: 01 02 FF"
+                  spellcheck="false"
+                  autocomplete="off"
+                >
+
+                <button
+                  class="btn btn-small"
+                  data-action="write"
+                  style="margin-top:5px"
+                >
+                  Enviar HEX
+                </button>
+
+              </div>
+
+            `
+            : ""
+          }
+
+        `;
+
+
+        const readButton =
+          char.querySelector(
+            '[data-action="read"]'
+          );
+
+
+        if (readButton) {
+
+          readButton.addEventListener(
+            "click",
+            () =>
+              readCharacteristic(
+                service.uuid,
+                characteristic.uuid
+              )
+          );
+
+        }
+
+
+        const notifyButton =
+          char.querySelector(
+            '[data-action="notify"]'
+          );
+
+
+        if (notifyButton) {
+
+          notifyButton.addEventListener(
+            "click",
+            () =>
+              toggleNotifications(
+                service.uuid,
+                characteristic.uuid,
+                notifyButton
+              )
+          );
+
+        }
+
+
+        const writeButton =
+          char.querySelector(
+            '[data-action="write"]'
+          );
+
+
+        if (writeButton) {
+
+          writeButton.addEventListener(
+            "click",
+            () =>
+              writeHex(
+                service.uuid,
+                characteristic.uuid
+              )
+          );
+
+        }
+
+
+        container.appendChild(
+          char
+        );
+
+      }
+    );
+
+
+    const parent =
+      container.parentElement;
+
+
+    if (parent) {
+
+      parent.parentElement.dataset.loaded =
+        "1";
+
+    }
+
+
+  } catch (error) {
+
+    container.innerHTML = `
+
+      <div class="empty">
+        Não foi possível descobrir as características.
+        <br><br>
+        ${escapeHtml(error.message)}
+      </div>
+
+    `;
+
+
+    log(
+      `Erro ao descobrir características: ${error.message}`,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ==========================================================
+   ATUALIZAR BATERIA
+========================================================== */
+
+function updateBattery(level) {
+
+  const safeLevel =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Number(level)
+      )
+    );
+
+
+  $("batteryText").textContent =
+    `${safeLevel}%`;
+
+
+  $("batteryFill").style.width =
+    `${safeLevel}%`;
+
+
+  $("batteryStatus").textContent =
+    "Nível recebido pelo Battery Service.";
+
+}
+
+
+/* ==========================================================
+   DETALHES
+========================================================== */
+
+function renderDetails() {
+
+  const container =
+    $("details");
+
+
+  const data =
+    state.selectedId
+      ? state.devices.get(
+          state.selectedId
+        )
+      : null;
+
+
+  if (!data) {
+
+    container.innerHTML =
+      `<div class="empty">
+        Selecione um dispositivo.
+      </div>`;
+
+    return;
+
+  }
+
+
+  const device =
+    data.raw;
+
+
+  const icon =
+    getDeviceIcon(
+      data
+    );
+
+
+  container.innerHTML = `
+
+    <div class="device-header">
+
+      <div class="device-big-icon">
+        ${icon}
+      </div>
+
+      <div>
+
+        <div class="device-big-name">
+          ${escapeHtml(
+            data.name
+          )}
+        </div>
+
+        <div class="device-id">
+          ${escapeHtml(
+            data.id
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="info-grid">
+
+      <div class="info-item">
+
+        <div class="info-label">
+          Estado
+        </div>
+
+        <div class="info-value">
+          ${
+            data.connected
+              ? "Conectado"
+              : "Desconectado"
+          }
+        </div>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <div class="info-label">
+          GATT
+        </div>
+
+        <div class="info-value">
+          ${
+            data.connected
+              ? "Disponível"
+              : "Não conectado"
+          }
+        </div>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <div class="info-label">
+          Serviços
+        </div>
+
+        <div class="info-value">
+          ${data.services.length}
+        </div>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <div class="info-label">
+          Heart Rate
+        </div>
+
+        <div class="info-value">
+          ${
+            data.hasHeartRate
+              ? "Detectado"
+              : "Não detectado"
+          }
+        </div>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <div class="info-label">
+          Bateria
+        </div>
+
+        <div class="info-value">
+          ${
+            data.hasBattery
+              ? "Detectada"
+              : "Não detectada"
+          }
+        </div>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <div class="info-label">
+          Nome
+        </div>
+
+        <div class="info-value">
+          ${escapeHtml(
+            device.name ||
+            "Sem nome"
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    ${
+      data.manufacturer
+      ? `
+        <div
+          style="
+            margin-top:10px;
+            color:#94a3b8;
+            font-size:10px;
+          "
+        >
+          Fabricante:
+          <strong style="color:white">
+            ${escapeHtml(
+              data.manufacturer
+            )}
+          </strong>
+        </div>
+      `
+      : ""
+    }
+
+
+    ${
+      data.model
+      ? `
+        <div
+          style="
+            margin-top:6px;
+            color:#94a3b8;
+            font-size:10px;
+          "
+        >
+          Modelo:
+          <strong style="color:white">
+            ${escapeHtml(
+              data.model
+            )}
+          </strong>
+        </div>
+      `
+      : ""
+    }
+
+
+    <div
+      style="
+        display:flex;
+        gap:7px;
+        margin-top:15px;
+        flex-wrap:wrap;
+      "
+    >
+
+      ${
+        data.connected
+
+        ? `
+          <button
+            class="btn btn-danger"
+            id="detailDisconnect"
+          >
+            Desconectar
+          </button>
+        `
+
+        : `
+          <button
+            class="btn btn-success"
+            id="detailConnect"
+          >
+            Conectar GATT
+          </button>
+        `
+      }
+
+    </div>
+
+  `;
+
+
+  const connectButton =
+    $("detailConnect");
+
+
+  if (connectButton) {
+
+    connectButton.onclick =
+      () => connectDevice(
+        data.id
+      );
+
+  }
+
+
+  const disconnectButton =
+    $("detailDisconnect");
+
+
+  if (disconnectButton) {
+
+    disconnectButton.onclick =
+      () => disconnectDevice(
+        data.id
+      );
+
+  }
+
+}
+
+
+/* ==========================================================
+   RENDER DEVICES
+========================================================== */
+
+function renderDevices() {
+
+  const container =
+    $("devices");
+
+
+  let devices =
+    Array.from(
+      state.devices.values()
+    );
+
+
+  const query =
+    state.search
+      .trim()
+      .toLowerCase();
+
+
+  devices =
+    devices.filter(
+      data => {
+
+        const matchesSearch =
+          !query ||
+          data.name
+            .toLowerCase()
+            .includes(query) ||
+          data.id
+            .toLowerCase()
+            .includes(query);
+
+
+        let matchesFilter =
+          true;
+
+
+        if (
+          state.filter ===
+          "connected"
+        ) {
+
+          matchesFilter =
+            data.connected;
+
+        }
+
+
+        if (
+          state.filter ===
+          "heart"
+        ) {
+
+          matchesFilter =
+            data.hasHeartRate;
+
+        }
+
+
+        if (
+          state.filter ===
+          "battery"
+        ) {
+
+          matchesFilter =
+            data.hasBattery;
+
+        }
+
+
+        return (
+          matchesSearch &&
+          matchesFilter
+        );
+
+      }
+    );
+
+
+  devices.sort(
+    (a, b) => {
+
+      if (
+        state.sort ===
+        "connection"
+      ) {
+
+        return (
+          Number(b.connected) -
+          Number(a.connected)
+        );
+
+      }
+
+
+      return a.name.localeCompare(
+        b.name,
+        "pt-BR"
+      );
+
+    }
+  );
+
+
+  if (devices.length === 0) {
+
+    container.innerHTML =
+      `<div class="empty">
+        Nenhum dispositivo corresponde ao filtro.
+      </div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    devices
+      .map(
+        data => {
+
+          const selected =
+            data.id ===
+            state.selectedId;
+
+
+          const icon =
+            getDeviceIcon(
+              data
+            );
+
+
+          return `
+
+            <article
+              class="device-card ${
+                selected
+                  ? "selected"
+                  : ""
+              }"
+              data-device-id="${escapeHtml(
+                data.id
+              )}"
+            >
+
+              <div class="device-icon">
+                ${icon}
+              </div>
+
+
+              <div>
+
+                <div class="device-name">
+                  ${escapeHtml(
+                    data.name
+                  )}
+                </div>
+
+
+                <div class="device-meta">
+                  ID:
+                  ${escapeHtml(
+                    data.id
+                  )}
+                </div>
+
+
+                <div class="device-badges">
+
+                  ${
+                    data.connected
+                    ? `
+                      <span class="badge green">
+                        GATT conectado
+                      </span>
+                    `
+                    : ""
+                  }
+
+
+                  ${
+                    data.hasHeartRate
+                    ? `
+                      <span class="badge cyan">
+                        ❤️ Heart Rate
+                      </span>
+                    `
+                    : ""
+                  }
+
+
+                  ${
+                    data.hasBattery
+                    ? `
+                      <span class="badge yellow">
+                        🔋 Battery
+                      </span>
+                    `
+                    : ""
+                  }
+
+                </div>
+
+              </div>
+
+
+              <div class="device-actions">
+
+                <button
+                  class="btn btn-small"
+                  data-action="select"
+                >
+                  Detalhes
+                </button>
+
+
+                ${
+                  data.connected
+
+                  ? `
+                    <button
+                      class="btn btn-small btn-danger"
+                      data-action="disconnect"
+                    >
+                      Desconectar
+                    </button>
+                  `
+
+                  : `
+                    <button
+                      class="btn btn-small btn-success"
+                      data-action="connect"
+                    >
+                      Conectar
+                    </button>
+                  `
+                }
+
+              </div>
+
+            </article>
+
+          `;
+
+        }
+      )
+      .join("");
 
 
   container
-    .querySelectorAll(".device-dot")
-    .forEach(el => el.remove());
+    .querySelectorAll(
+      "[data-device-id]"
+    )
+    .forEach(
+      card => {
+
+        const id =
+          card.dataset.deviceId;
+
+
+        card.addEventListener(
+          "click",
+          event => {
+
+            if (
+              event.target.closest(
+                "button"
+              )
+            ) {
+              return;
+            }
+
+            selectDevice(id);
+
+          }
+        );
+
+
+        const selectButton =
+          card.querySelector(
+            '[data-action="select"]'
+          );
+
+
+        if (selectButton) {
+
+          selectButton.onclick =
+            () =>
+              selectDevice(id);
+
+        }
+
+
+        const connectButton =
+          card.querySelector(
+            '[data-action="connect"]'
+          );
+
+
+        if (connectButton) {
+
+          connectButton.onclick =
+            () =>
+              connectDevice(id);
+
+        }
+
+
+        const disconnectButton =
+          card.querySelector(
+            '[data-action="disconnect"]'
+          );
+
+
+        if (disconnectButton) {
+
+          disconnectButton.onclick =
+            () =>
+              disconnectDevice(id);
+
+        }
+
+      }
+    );
+
+}
+
+
+/* ==========================================================
+   RADAR
+========================================================== */
+
+function renderRadar() {
+
+  const radar =
+    $("radar");
+
+
+  radar
+    .querySelectorAll(
+      ".target"
+    )
+    .forEach(
+      element =>
+        element.remove()
+    );
 
 
   const devices =
-    getFilteredDevices();
+    Array.from(
+      state.devices.values()
+    );
 
 
   devices.forEach(
-    (device, index) => {
+    data => {
 
-      const angle =
-        (
-          (index * 137.5)
-          +
-          (
-            Number(
-              String(device.id)
-                .split("")
-                .reduce(
-                  (a, c) =>
-                    a + c.charCodeAt(0),
-                  0
-                )
-            )
-          )
-        ) % 360;
-
-
-      const radius =
-        24 +
-        (
-          (index * 31)
-          %
-          55
+      const target =
+        document.createElement(
+          "button"
         );
 
 
-      const x =
-        50 +
-        radius *
-        Math.cos(
-          angle *
-          Math.PI /
-          180
-        );
+      target.type =
+        "button";
 
 
-      const y =
-        50 +
-        radius *
-        Math.sin(
-          angle *
-          Math.PI /
-          180
-        );
-
-
-      const button =
-        document.createElement("button");
-
-
-      button.className =
-        "device-dot" +
+      target.className =
+        "target" +
         (
-          device.id === state.selectedId
+          data.id ===
+          state.selectedId
             ? " selected"
             : ""
         );
 
 
-      button.style.left =
+      const angle =
+        data.angle;
+
+
+      const radius =
+        data.radius;
+
+
+      const x =
+        50 +
+        Math.cos(
+          angle *
+          Math.PI /
+          180
+        ) *
+        radius *
+        42;
+
+
+      const y =
+        50 +
+        Math.sin(
+          angle *
+          Math.PI /
+          180
+        ) *
+        radius *
+        42;
+
+
+      target.style.left =
         `${x}%`;
 
-      button.style.top =
+
+      target.style.top =
         `${y}%`;
 
 
-      button.title =
-        device.name;
+      target.innerHTML = `
+
+        <span>
+          ${
+            data.hasHeartRate
+              ? "❤️"
+              : data.hasBattery
+                ? "🔋"
+                : "📡"
+          }
+        </span>
+
+        <span class="target-name">
+          ${escapeHtml(
+            data.name
+          )}
+        </span>
+
+      `;
 
 
-      button.textContent =
-        deviceIcon(device);
-
-
-      button.onclick =
+      target.onclick =
         () =>
-          selectDevice(device.id);
+          selectDevice(
+            data.id
+          );
 
 
-      container.appendChild(button);
+      radar.appendChild(
+        target
+      );
 
-    });
+    }
+  );
 
 
-  targetBadge.textContent =
-    `${devices.length} ALVOS`;
+  $("radarCount").textContent =
+    `${devices.length} alvo${
+      devices.length === 1
+        ? ""
+        : "s"
+    }`;
 
 }
 
 
-/* =========================================================
-   RENDER DETAILS
-========================================================= */
+/* ==========================================================
+   SELECIONAR
+========================================================== */
 
-function renderDetails(device) {
+function selectDevice(id) {
 
-  if (!device) {
-
-    details.innerHTML = `
-      <div class="empty">
-        Selecione um dispositivo para visualizar informações.
-      </div>
-    `;
-
-    selectedBadge.textContent =
-      "NENHUM";
+  if (
+    !state.devices.has(id)
+  ) {
 
     return;
 
   }
-
-
-  selectedBadge.textContent =
-    device.name
-      .slice(0, 18)
-      .toUpperCase();
-
-
-  const servicesHTML =
-    device.services.length
-
-      ?
-
-      device.services.map(
-        service => `
-
-          <div class="service">
-
-            <div class="service-header">
-
-              <div>
-
-                <div class="service-name">
-                  ${escapeHTML(service.name)}
-                </div>
-
-                <div class="service-uuid">
-                  ${escapeHTML(service.uuid)}
-                </div>
-
-              </div>
-
-              <div class="badge">
-                ${service.characteristics.length}
-              </div>
-
-            </div>
-
-            <div class="characteristics">
-
-              ${
-                service.characteristics.length
-
-                ?
-
-                service.characteristics.map(
-                  characteristic => {
-
-                    const props =
-                      characteristic.properties ||
-                      {};
-
-                    const propertyNames = [];
-
-                    if (props.read)
-                      propertyNames.push("READ");
-
-                    if (props.write)
-                      propertyNames.push("WRITE");
-
-                    if (props.writeWithoutResponse)
-                      propertyNames.push("WRITE_NR");
-
-                    if (props.notify)
-                      propertyNames.push("NOTIFY");
-
-                    if (props.indicate)
-                      propertyNames.push("INDICATE");
-
-
-                    const notificationActive =
-                      state.notifications.has(
-                        characteristic.uuid
-                      );
-
-
-                    return `
-
-                      <div class="characteristic">
-
-                        <div class="characteristic-title">
-                          Característica
-                        </div>
-
-                        <div class="characteristic-uuid">
-                          ${escapeHTML(
-                            characteristic.uuid
-                          )}
-                        </div>
-
-
-                        <div class="properties">
-
-                          ${
-                            propertyNames.length
-
-                              ?
-
-                              propertyNames.map(
-                                p =>
-                                  `<span class="property">
-                                    ${p}
-                                  </span>`
-                              ).join("")
-
-                              :
-
-                              `<span class="property">
-                                SEM PROPRIEDADES
-                              </span>`
-                          }
-
-                        </div>
-
-
-                        <div class="char-actions">
-
-                          ${
-                            props.read
-
-                            ?
-
-                            `
-                              <button
-                                class="btn btn-small"
-                                onclick="window.readCharacteristic(
-                                  '${escapeHTML(device.id)}',
-                                  '${escapeHTML(characteristic.uuid)}'
-                                )"
-                              >
-                                📖 Ler
-                              </button>
-                            `
-
-                            : ""
-                          }
-
-
-                          ${
-                            props.notify
-
-                            ?
-
-                            `
-                              <button
-                                class="btn btn-small"
-                                onclick="window.toggleNotification(
-                                  '${escapeHTML(device.id)}',
-                                  '${escapeHTML(characteristic.uuid)}'
-                                )"
-                              >
-                                ${
-                                  notificationActive
-                                    ? "🔴 Parar"
-                                    : "🔔 Notificar"
-                                }
-                              </button>
-                            `
-
-                            : ""
-                          }
-
-                        </div>
-
-
-                        ${
-                          characteristic.value
-
-                            ?
-
-                            `
-                              <div class="char-value">
-                                ${escapeHTML(
-                                  characteristic.value
-                                )}
-                              </div>
-                            `
-
-                            : ""
-                        }
-
-                      </div>
-
-                    `;
-
-                  }
-                ).join("")
-
-                :
-
-                `
-                  <div class="empty">
-                    Nenhuma característica disponível.
-                  </div>
-                `
-              }
-
-            </div>
-
-          </div>
-
-        `
-      ).join("")
-
-      :
-
-      `
-        <div class="empty">
-          Conecte-se ao dispositivo para descobrir
-          os serviços GATT.
-        </div>
-      `;
-
-
-  details.innerHTML = `
-
-    <div class="device-header">
-
-      <div class="big-icon">
-        ${deviceIcon(device)}
-      </div>
-
-      <div>
-
-        <h3>
-          ${escapeHTML(device.name)}
-        </h3>
-
-        <p>
-          ${
-            device.connected
-              ? "● GATT conectado"
-              : "○ Não conectado"
-          }
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div class="detail-grid">
-
-      <div class="detail-card">
-
-        <div class="detail-label">
-          Nome
-        </div>
-
-        <div class="detail-value">
-          ${escapeHTML(device.name)}
-        </div>
-
-      </div>
-
-
-      <div class="detail-card">
-
-        <div class="detail-label">
-          ID
-        </div>
-
-        <div class="detail-value">
-          ${escapeHTML(device.id)}
-        </div>
-
-      </div>
-
-
-      <div class="detail-card">
-
-        <div class="detail-label">
-          RSSI
-        </div>
-
-        <div class="detail-value">
-
-          ${
-            typeof device.rssi === "number"
-              ? `${device.rssi} dBm`
-              : "Não fornecido pelo navegador"
-          }
-
-        </div>
-
-      </div>
-
-
-      <div class="detail-card">
-
-        <div class="detail-label">
-          Bateria
-        </div>
-
-        <div class="detail-value">
-
-          ${
-            device.battery !== null
-              ? `${device.battery}%`
-              : "Não disponível"
-          }
-
-        </div>
-
-      </div>
-
-
-      <div class="detail-card">
-
-        <div class="detail-label">
-          GATT
-        </div>
-
-        <div class="detail-value">
-
-          ${
-            device.connected
-              ? "Conectado"
-              : "Desconectado"
-          }
-
-        </div>
-
-      </div>
-
-
-      <div class="detail-card">
-
-        <div class="detail-label">
-          Serviços
-        </div>
-
-        <div class="detail-value">
-          ${device.services.length}
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div style="
-      display:flex;
-      gap:7px;
-      flex-wrap:wrap;
-    ">
-
-      ${
-        device.connected
-
-        ?
-
-        `
-          <button
-            class="btn btn-danger btn-small"
-            onclick="window.disconnectDevice(
-              '${escapeHTML(device.id)}'
-            )"
-          >
-            ⛔ Desconectar
-          </button>
-        `
-
-        :
-
-        `
-          <button
-            class="btn btn-primary btn-small"
-            onclick="window.connectDevice(
-              '${escapeHTML(device.id)}'
-            )"
-          >
-            🔗 Conectar GATT
-          </button>
-        `
-      }
-
-
-      <button
-        class="btn btn-small"
-        onclick="window.forgetDevice(
-          '${escapeHTML(device.id)}'
-        )"
-      >
-        🗑 Remover
-      </button>
-
-    </div>
-
-
-    <div class="section-title">
-
-      <span>
-        Serviços GATT
-      </span>
-
-      <span class="badge">
-        ${device.services.length}
-      </span>
-
-    </div>
-
-
-    ${servicesHTML}
-
-  `;
-
-}
-
-
-/* =========================================================
-   SELECIONAR
-========================================================= */
-
-async function selectDevice(id) {
-
-  const device =
-    state.devices.find(
-      d => d.id === id
-    );
-
-  if (!device) return;
 
 
   state.selectedId =
     id;
 
 
-  renderAll();
-
-
-  if (
-    device.connected &&
-    !device.discovered
-  ) {
-
-    await discoverServices(device);
-
-  }
-
-}
-
-
-/* =========================================================
-   REMOVER
-========================================================= */
-
-async function forgetDevice(id) {
-
-  const index =
-    state.devices.findIndex(
-      d => d.id === id
-    );
-
-  if (index < 0) return;
-
-
-  const device =
-    state.devices[index];
-
-
-  try {
-
-    if (
-      device.rawDevice &&
-      typeof device.rawDevice.forget ===
-        "function"
-    ) {
-
-      await device.rawDevice.forget();
-
-      log(
-        `Permissão removida: ${device.name}`,
-        "success"
-      );
-
-    }
-
-  } catch (error) {
-
-    log(
-      `Não foi possível revogar a permissão: ${error.message}`,
-      "warning"
-    );
-
-  }
-
-
-  state.devices.splice(index, 1);
-
-
-  if (
-    state.selectedId === id
-  ) {
-
-    state.selectedId = null;
-
-  }
+  const data =
+    state.devices.get(id);
 
 
   renderAll();
 
-}
 
+  if (data.connected) {
 
-/* =========================================================
-   EXPORTAR
-========================================================= */
+    updateConnectionUI(true);
 
-function exportJSON() {
+  } else {
 
-  const exportData =
-    state.devices.map(
-      device => ({
+    updateConnectionUI(false);
 
-        id: device.id,
-
-        name: device.name,
-
-        connected: device.connected,
-
-        battery: device.battery,
-
-        rssi:
-          typeof device.rssi === "number"
-            ? device.rssi
-            : null,
-
-        services:
-          device.services,
-
-        lastSeen:
-          device.lastSeen,
-
-        exportedAt:
-          new Date().toISOString()
-
-      })
-    );
-
-
-  const blob =
-    new Blob(
-      [
-        JSON.stringify(
-          exportData,
-          null,
-          2
-        )
-      ],
-      {
-        type: "application/json"
-      }
-    );
-
-
-  const url =
-    URL.createObjectURL(blob);
-
-
-  const a =
-    document.createElement("a");
-
-
-  a.href = url;
-
-  a.download =
-    `ble-scan-${Date.now()}.json`;
-
-
-  document.body.appendChild(a);
-
-  a.click();
-
-  a.remove();
-
-
-  URL.revokeObjectURL(url);
-
-
-  log(
-    "Dados exportados para JSON.",
-    "success"
-  );
+  }
 
 }
 
 
-/* =========================================================
-   DIAGNÓSTICO
-========================================================= */
+/* ==========================================================
+   ÍCONE
+========================================================== */
 
-async function showDiagnostics() {
+function getDeviceIcon(data) {
 
-  const checks = [];
+  if (data.hasHeartRate) {
+    return "❤️";
+  }
 
+  if (data.hasBattery) {
+    return "🔋";
+  }
 
-  checks.push({
-    label: "Android",
-    value:
-      isAndroid()
-        ? "Detectado"
-        : "Não detectado"
-  });
-
-
-  checks.push({
-    label: "Navegador",
-    value: browserName()
-  });
+  const name =
+    data.name.toLowerCase();
 
 
-  checks.push({
-    label: "HTTPS",
-    value:
-      window.isSecureContext
-        ? "OK"
-        : "ERRO"
-  });
+  if (
+    name.includes("head") ||
+    name.includes("fone") ||
+    name.includes("buds") ||
+    name.includes("sony") ||
+    name.includes("airpods")
+  ) {
 
-
-  checks.push({
-    label: "Web Bluetooth",
-    value:
-      "bluetooth" in navigator
-        ? "Disponível"
-        : "Indisponível"
-  });
-
-
-  checks.push({
-    label: "GATT",
-    value:
-      "bluetooth" in navigator
-        ? "Suportado pela API"
-        : "Indisponível"
-  });
-
-
-  checks.push({
-    label: "getDevices",
-    value:
-      typeof navigator.bluetooth?.getDevices ===
-      "function"
-        ? "Disponível"
-        : "Não disponível"
-  });
-
-
-  checks.push({
-    label: "requestDevice",
-    value:
-      typeof navigator.bluetooth?.requestDevice ===
-      "function"
-        ? "Disponível"
-        : "Não disponível"
-  });
-
-
-  checks.push({
-    label: "getAvailability",
-    value:
-      typeof navigator.bluetooth?.getAvailability ===
-      "function"
-        ? "Disponível"
-        : "Não disponível"
-  });
-
-
-  checks.push({
-    label: "Dispositivos no scanner",
-    value:
-      String(state.devices.length)
-  });
-
-
-  let bluetoothAvailability =
-    "Não verificado";
-
-
-  try {
-
-    if (
-      typeof navigator.bluetooth?.getAvailability ===
-      "function"
-    ) {
-
-      bluetoothAvailability =
-        await navigator.bluetooth.getAvailability()
-          ? "Disponível"
-          : "Indisponível";
-
-    }
-
-  } catch {
-
-    bluetoothAvailability =
-      "Erro na verificação";
+    return "🎧";
 
   }
 
 
-  checks.push({
-    label: "Bluetooth do navegador",
-    value: bluetoothAvailability
-  });
+  if (
+    name.includes("keyboard") ||
+    name.includes("teclado")
+  ) {
+
+    return "⌨️";
+
+  }
 
 
-  diagnosticContent.innerHTML = `
+  if (
+    name.includes("mouse")
+  ) {
 
-    <div class="detail-grid">
+    return "🖱️";
 
-      ${
-        checks.map(
-          item => `
-
-            <div class="detail-card">
-
-              <div class="detail-label">
-                ${escapeHTML(item.label)}
-              </div>
-
-              <div class="detail-value">
-                ${escapeHTML(item.value)}
-              </div>
-
-            </div>
-
-          `
-        ).join("")
-      }
-
-    </div>
+  }
 
 
-    <p>
-      <strong>Observação:</strong>
-      o Web Bluetooth é uma API limitada quando comparada
-      ao BluetoothLeScanner nativo do Android.
-      Portanto, informações como RSSI contínuo, MAC físico
-      e lista completa de dispositivos próximos não são
-      garantidas pelo navegador.
-    </p>
+  if (
+    name.includes("watch") ||
+    name.includes("relógio")
+  ) {
 
-  `;
+    return "⌚";
+
+  }
 
 
-  modalBackdrop.classList.add("show");
+  return "📡";
 
 }
 
 
-/* =========================================================
+/* ==========================================================
+   STATUS CONEXÃO
+========================================================== */
+
+function updateConnectionUI(connected) {
+
+  if (connected) {
+
+    $("connectionStatus").textContent =
+      "GATT conectado";
+
+    $("connectionStatus")
+      .parentElement
+      .style.color =
+      "var(--green)";
+
+  } else {
+
+    $("connectionStatus").textContent =
+      "Desconectado";
+
+    $("connectionStatus")
+      .parentElement
+      .style.color =
+      "var(--muted)";
+
+  }
+
+}
+
+
+/* ==========================================================
    RENDER GERAL
-========================================================= */
+========================================================== */
 
 function renderAll() {
 
-  renderDeviceList();
+  renderDevices();
 
   renderRadar();
 
-  const selected =
-    state.devices.find(
-      d => d.id === state.selectedId
-    );
+  renderDetails();
 
-
-  renderDetails(selected);
-
-
-  deviceCount.textContent =
-    String(state.devices.length);
+  $("deviceCount").textContent =
+    state.devices.size;
 
 }
 
 
-/* =========================================================
+/* ==========================================================
    LIMPAR
-========================================================= */
+========================================================== */
 
 function clearDevices() {
 
-  state.devices = [];
+  for (
+    const data of
+    state.devices.values()
+  ) {
 
-  state.selectedId = null;
+    try {
 
-  state.connectedId = null;
+      if (
+        data.raw.gatt &&
+        data.raw.gatt.connected
+      ) {
 
-  state.characteristics.clear();
+        data.raw.gatt.disconnect();
 
-  state.notifications.clear();
+      }
+
+    } catch (_) {}
+
+  }
+
+
+  state.devices.clear();
+
+  state.selectedId =
+    null;
+
+  state.connected =
+    null;
+
+  state.services =
+    [];
+
+  state.heartCharacteristic =
+    null;
+
+  state.batteryCharacteristic =
+    null;
+
+
+  $("bpm").textContent =
+    "--";
+
+  $("heartStatus").textContent =
+    "Heart Rate não conectado";
+
+  $("batteryText").textContent =
+    "--";
+
+  $("batteryFill").style.width =
+    "0%";
+
+  $("batteryStatus").textContent =
+    "Nenhuma bateria disponível.";
+
+  $("gatt").innerHTML =
+    `<div class="empty">
+      Conecte um dispositivo para descobrir o GATT.
+    </div>`;
+
+
+  updateConnectionUI(false);
 
   renderAll();
+
 
   log(
     "Lista local de dispositivos limpa.",
@@ -4148,120 +5061,331 @@ function clearDevices() {
 }
 
 
-/* =========================================================
-   EVENTOS UI
-========================================================= */
+/* ==========================================================
+   ERROS BLUETOOTH
+========================================================== */
 
-scanBtn.addEventListener(
-  "click",
-  scanBLE
-);
+function handleBluetoothError(
+  error,
+  prefix
+) {
 
-
-knownDevicesBtn.addEventListener(
-  "click",
-  loadKnownDevices
-);
+  if (!error) {
+    return;
+  }
 
 
-$("clearBtn").addEventListener(
-  "click",
-  clearDevices
-);
+  const name =
+    error.name || "";
 
 
-$("exportBtn").addEventListener(
-  "click",
-  exportJSON
-);
+  let message =
+    error.message ||
+    "Erro desconhecido.";
 
 
-$("diagnosticBtn").addEventListener(
-  "click",
-  showDiagnostics
-);
+  if (
+    name ===
+    "NotFoundError"
+  ) {
 
+    message =
+      "Seleção cancelada ou nenhum dispositivo encontrado.";
 
-$("clearLogsBtn").addEventListener(
-  "click",
-  () => {
+    log(
+      message,
+      "warning"
+    );
 
-    state.logs = [];
+    toast(
+      message,
+      "info"
+    );
 
-    renderLogs();
+    return;
 
   }
-);
 
 
-searchInput.addEventListener(
-  "input",
-  renderAll
-);
+  if (
+    name ===
+    "SecurityError"
+  ) {
 
-
-$("modalClose").addEventListener(
-  "click",
-  () => {
-
-    modalBackdrop.classList.remove("show");
+    message =
+      "O navegador bloqueou o acesso ao Bluetooth. Verifique HTTPS e permissões.";
 
   }
-);
 
 
-modalBackdrop.addEventListener(
-  "click",
-  event => {
+  if (
+    name ===
+    "NotSupportedError"
+  ) {
 
-    if (
-      event.target ===
-      modalBackdrop
-    ) {
+    message =
+      "Esta operação não é suportada pelo navegador/dispositivo.";
 
-      modalBackdrop.classList.remove(
-        "show"
+  }
+
+
+  if (
+    name ===
+    "NetworkError"
+  ) {
+
+    message =
+      "Falha na conexão BLE/GATT. O dispositivo pode ter desconectado.";
+
+  }
+
+
+  log(
+    `${prefix}: ${message}`,
+    "error"
+  );
+
+
+  toast(
+    message,
+    "error"
+  );
+
+}
+
+
+/* ==========================================================
+   ERRO DE NAVEGADOR
+========================================================== */
+
+function showBrowserError() {
+
+  $("modalTitle").textContent =
+    "Web Bluetooth não disponível";
+
+
+  $("modalBody").innerHTML = `
+
+    <div style="
+      line-height:1.7;
+      color:#cbd5e1;
+      font-size:12px;
+    ">
+
+      <strong style="color:white">
+        O navegador atual não disponibilizou a API Web Bluetooth.
+      </strong>
+
+      <br><br>
+
+      Para testar este scanner no Android, utilize um navegador
+      compatível com Web Bluetooth e abra a página em um
+      <strong style="color:#22d3ee">
+        contexto seguro HTTPS
+      </strong>.
+
+      <br><br>
+
+      Também é necessário que o Bluetooth do telefone esteja
+      ligado.
+
+      <br><br>
+
+      <strong style="color:#fbbf24">
+        Importante:
+      </strong>
+
+      este projeto é para dispositivos
+      <strong style="color:white">
+        Bluetooth Low Energy (BLE)
+      </strong>.
+      Ele não transforma o navegador em um scanner clássico
+      Bluetooth BR/EDR.
+
+    </div>
+
+  `;
+
+
+  $("modal")
+    .classList
+    .add("show");
+
+}
+
+
+/* ==========================================================
+   MODAL
+========================================================== */
+
+function closeModal() {
+
+  $("modal")
+    .classList
+    .remove("show");
+
+}
+
+
+/* ==========================================================
+   FILTROS
+========================================================== */
+
+document
+  .querySelectorAll(
+    ".filter"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          document
+            .querySelectorAll(
+              ".filter"
+            )
+            .forEach(
+              item =>
+                item.classList.remove(
+                  "active"
+                )
+            );
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          state.filter =
+            button.dataset.filter;
+
+
+          renderDevices();
+
+        }
       );
 
     }
-
-  }
-);
+  );
 
 
-/* =========================================================
-   EXPOR FUNÇÕES PARA BOTÕES
-========================================================= */
+/* ==========================================================
+   PESQUISA
+========================================================== */
 
-window.selectDevice =
-  selectDevice;
+$("search")
+  .addEventListener(
+    "input",
+    event => {
 
-window.connectDevice =
-  connectDevice;
+      state.search =
+        event.target.value;
 
-window.disconnectDevice =
-  disconnectDevice;
+      renderDevices();
 
-window.readCharacteristic =
-  readCharacteristic;
-
-window.toggleNotification =
-  toggleNotification;
-
-window.forgetDevice =
-  forgetDevice;
+    }
+  );
 
 
-/* =========================================================
-   TECLADO
-========================================================= */
+/* ==========================================================
+   ORDENAÇÃO
+========================================================== */
+
+$("sort")
+  .addEventListener(
+    "change",
+    event => {
+
+      state.sort =
+        event.target.value;
+
+      renderDevices();
+
+    }
+  );
+
+
+/* ==========================================================
+   BOTÕES
+========================================================== */
+
+$("btnScan")
+  .addEventListener(
+    "click",
+    scan
+  );
+
+
+$("btnGranted")
+  .addEventListener(
+    "click",
+    getGrantedDevices
+  );
+
+
+$("btnClear")
+  .addEventListener(
+    "click",
+    clearDevices
+  );
+
+
+$("btnClearLogs")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("logs").innerHTML = "";
+
+      log(
+        "Logs limpos.",
+        "info"
+      );
+
+    }
+  );
+
+
+$("modalClose")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+
+$("modal")
+  .addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target ===
+        $("modal")
+      ) {
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+
+/* ==========================================================
+   TECLADO DESKTOP
+========================================================== */
 
 window.addEventListener(
   "keydown",
   event => {
 
     if (
-      event.target.tagName === "INPUT"
+      event.target.matches(
+        "input, textarea, select"
+      )
     ) {
 
       return;
@@ -4270,21 +5394,23 @@ window.addEventListener(
 
 
     if (
-      event.key.toLowerCase() === "s"
+      event.key.toLowerCase() ===
+      "s"
     ) {
 
-      scanBLE();
+      event.preventDefault();
+
+      scan();
 
     }
 
 
     if (
-      event.key === "Escape"
+      event.key ===
+      "Escape"
     ) {
 
-      modalBackdrop.classList.remove(
-        "show"
-      );
+      closeModal();
 
     }
 
@@ -4292,36 +5418,33 @@ window.addEventListener(
 );
 
 
-/* =========================================================
+/* ==========================================================
    INICIALIZAÇÃO
-========================================================= */
+========================================================== */
 
 async function init() {
 
   log(
-    "Radar Bluetooth Scanner Pro 4.0 iniciado.",
+    "Radar Bluetooth Scanner Pro iniciado.",
     "success"
   );
 
 
   log(
-    "Verificando compatibilidade do navegador...",
+    "Modo: Web Bluetooth BLE / GATT.",
     "info"
   );
 
 
-  await checkCompatibility();
+  await checkBrowser();
 
 
   renderAll();
 
 
   /*
-    Tenta recuperar dispositivos previamente
-    autorizados.
-
-    Se o navegador não suportar getDevices(),
-    simplesmente ignora.
+    Recupera permissões já concedidas.
+    Alguns navegadores podem não implementar getDevices().
   */
 
   if (
@@ -4336,40 +5459,33 @@ async function init() {
         await navigator.bluetooth.getDevices();
 
 
-      for (
-        const device
-        of devices
+      devices.forEach(
+        registerDevice
+      );
+
+
+      renderAll();
+
+
+      if (
+        devices.length
       ) {
 
-        addDevice(device);
-
-      }
-
-
-      if (devices.length) {
-
         log(
-          `${devices.length} dispositivo(s) previamente autorizado(s) encontrado(s).`,
+          `${devices.length} dispositivo(s) autorizado(s) recuperado(s) automaticamente.`,
           "success"
         );
 
       }
 
-    } catch {
-
-      // Sem ação.
-    }
+    } catch (_) {}
 
   }
-
-
-  renderAll();
 
 }
 
 
 init();
-
 
 </script>
 
